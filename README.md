@@ -1,5 +1,5 @@
 # dotfiles
-### This is my .files backup
+### These are my .files backup
 
 ## Based on...
 + http://dotfiles.github.io/
