@@ -19,10 +19,10 @@ brew install mongodb
 brew tap phinze/homebrew-cask
 brew install brew-cask
 
+brew cask install google-drive
 brew cask install virtualbox
 brew cask install sublime-text
 brew cask install google-chrome
-brew cask install google-drive
 brew cask install opera
 brew cask install firefox
 brew cask install firefox-nightly
@@ -33,7 +33,7 @@ wget https://github.com/dreyacosta/dotfiles/archive/master.zip
 
 unzip master.zip
 
-mv -v dotfiles-master/.* .
+mv -v dotfiles-master/.* ~/
 
 rm -rfv dotfiles-master/
 
