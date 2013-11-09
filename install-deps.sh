@@ -20,17 +20,21 @@ sudo npm install -g grunt-cli
 sudo npm install -g bower
 
 brew tap phinze/homebrew-cask
+brew tap dreyacosta/homebrew-cask
 brew install brew-cask
 
+brew cask install magicprefs
 brew cask install google-drive
 brew cask install virtualbox
 brew cask install sublime-text
 brew cask install iterm2
 brew cask install google-chrome
+brew cask install google-chrome-canary
 brew cask install opera
+brew cask install opera-next
 brew cask install firefox
 brew cask install firefox-nightly
-brew cask install opera-next
+brew cask install webkit-nightly
 brew cask install team-viewer
 
 wget https://github.com/dreyacosta/dotfiles/archive/master.zip
