@@ -16,12 +16,16 @@ brew install nmap
 brew install node
 brew install mongodb
 
+sudo npm install -g grunt-cli
+sudo npm install -g bower
+
 brew tap phinze/homebrew-cask
 brew install brew-cask
 
 brew cask install google-drive
 brew cask install virtualbox
 brew cask install sublime-text
+brew cask install iterm2
 brew cask install google-chrome
 brew cask install opera
 brew cask install firefox
@@ -40,3 +44,8 @@ rm -rfv dotfiles-master/
 rm -rf  ~/Library/Application\ Support/Sublime\ Text\ 2/
 
 ln -s ~/Google\ Drive/Sublime ~/Library/Application\ Support/Sublime\ Text\ 2
+
+git config --global user.name "David Rey"
+git config --global user.email "david.rey.acosta@gmail.com"
+
+ssh-keygen -t rsa -C "david.rey.acosta@gmail.com"
