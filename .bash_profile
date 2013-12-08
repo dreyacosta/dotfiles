@@ -14,6 +14,12 @@ source ~/.rvm/scripts/rvm
 # Case-insensitive globbing (used in pathname expansion)
 shopt -s nocaseglob
 
+# init virtualenvwrapper
+export VIRTUALENVWRAPPER_PYTHON=/usr/local/bin/python
+export WORKON_HOME=$HOME/.virtualenvs
+export PROJECT_HOME=$HOME/Devel
+source /usr/local/bin/virtualenvwrapper.sh
+
 # Prefer US English and use UTF-8
 export LC_ALL="en_US.UTF-8"
 export LANG="en_US"

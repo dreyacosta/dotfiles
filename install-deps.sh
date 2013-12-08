@@ -10,9 +10,14 @@ chmod +x ~/code/z/z.sh
 
 brew doctor
 
+brew install python
+pip install virtualenvwrapper
+
 brew install wget
+brew install ngrep
 brew install htop
 brew install nmap
+brew install git bash-completion
 brew install node
 brew install mongodb
 
@@ -35,7 +40,7 @@ brew cask install opera-next
 brew cask install firefox
 brew cask install firefox-nightly
 brew cask install webkit-nightly
-brew cask install team-viewer
+brew cask install teamviewer
 
 wget https://github.com/dreyacosta/dotfiles/archive/master.zip
 
