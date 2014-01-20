@@ -17,6 +17,7 @@ brew install wget
 brew install ngrep
 brew install htop
 brew install nmap
+brew install python
 brew install git bash-completion
 brew install node
 brew install mongodb
@@ -28,6 +29,7 @@ brew tap phinze/homebrew-cask
 brew tap dreyacosta/homebrew-cask
 brew install brew-cask
 
+brew cask install dropbox
 brew cask install magicprefs
 brew cask install google-drive
 brew cask install virtualbox
