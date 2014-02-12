@@ -1,7 +1,7 @@
 # Load ~/.extra, ~/.bash_prompt, ~/.exports, ~/.aliases and ~/.functions
 # ~/.extra can be used for settings you don’t want to commit
 for file in ~/.{extra,bash_prompt,exports,aliases,functions}; do
-	[ -r "$file" ] && source "$file"
+  [ -r "$file" ] && source "$file"
 done
 unset file
 
@@ -13,6 +13,11 @@ source ~/.rvm/scripts/rvm
 
 # Case-insensitive globbing (used in pathname expansion)
 shopt -s nocaseglob
+
+# Bash completion
+if [ -f $(brew --prefix)/etc/bash_completion ]; then
+  . $(brew --prefix)/etc/bash_completion
+fi
 
 # init virtualenvwrapper
 export VIRTUALENVWRAPPER_PYTHON=/usr/local/bin/python
