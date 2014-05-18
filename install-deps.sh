@@ -5,7 +5,7 @@ ruby -e "$(curl -fsSL https://raw.github.com/Homebrew/homebrew/go/install)"
 # https://github.com/rupa/z
 # z, oh how i love you
 mkdir -p ~/code/z
-curl https://raw.github.com/rupa/z/master/z.sh > ~/code/z/z.sh
+curl https://raw.githubusercontent.com/rupa/z/master/z.sh > ~/code/z/z.sh
 chmod +x ~/code/z/z.sh
 
 brew doctor
