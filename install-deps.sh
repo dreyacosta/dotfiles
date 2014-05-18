@@ -10,14 +10,10 @@ chmod +x ~/code/z/z.sh
 
 brew doctor
 
-brew install python
-pip install virtualenvwrapper
-
 brew install wget
 brew install ngrep
 brew install htop
 brew install nmap
-brew install python
 brew install git bash-completion
 brew install node
 brew install mongodb
@@ -44,6 +40,7 @@ brew cask install firefox
 brew cask install firefox-nightly
 brew cask install webkit-nightly
 brew cask install teamviewer
+
 brew install mackup
 
 git config --global user.name "David Rey"

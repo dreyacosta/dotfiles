@@ -20,10 +20,10 @@ if [ -f $(brew --prefix)/etc/bash_completion ]; then
 fi
 
 # init virtualenvwrapper
-export VIRTUALENVWRAPPER_PYTHON=/usr/local/bin/python
-export WORKON_HOME=$HOME/.virtualenvs
-export PROJECT_HOME=$HOME/Devel
-source /usr/local/bin/virtualenvwrapper.sh
+# export VIRTUALENVWRAPPER_PYTHON=/usr/local/bin/python
+# export WORKON_HOME=$HOME/.virtualenvs
+# export PROJECT_HOME=$HOME/Devel
+# source /usr/local/bin/virtualenvwrapper.sh
 
 # Prefer US English and use UTF-8
 export LC_ALL="en_US.UTF-8"
