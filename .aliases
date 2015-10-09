@@ -8,7 +8,7 @@ alias ~="cd ~" # `cd` is probably faster to type though
 alias -- -="cd -"
 
 # programs
-alias slt='open -a "Sublime Text 2"'
+alias slt='open -a "Sublime Text"'
 # also/or do this:
 # ln -s "/Applications/Sublime Text 2.app/Contents/SharedSupport/bin/subl" ~/bin/subl
 
@@ -69,8 +69,8 @@ alias whois="whois -h whois-servers.net"
 alias flush="dscacheutil -flushcache"
 
 # View HTTP traffic
-alias sniff="sudo ngrep -d 'en1' -t '^(GET|POST) ' 'tcp and port 80'"
-alias httpdump="sudo tcpdump -i en1 -n -s 0 -w - | grep -a -o -E \"Host\: .*|GET \/.*\""
+alias sniff="sudo ngrep -d 'en0' -t '^(GET|POST) ' 'tcp and port 80'"
+alias httpdump="sudo tcpdump -i en0 -n -s 0 -w - | grep -a -o -E \"Host\: .*|GET \/.*\""
 
 # Canonical hex dump; some systems have this symlinked
 type -t hd > /dev/null || alias hd="hexdump -C"
@@ -87,6 +87,12 @@ alias cleanup="find . -name '*.DS_Store' -type f -ls -delete"
 # Shortcuts
 alias g="git"
 alias v="vim"
+
+# MongoDB
+alias mongod="ulimit -n 2048 && mongod --dbpath /usr/local/var/mongodb/ --replSet 'rs0'"
+
+# Time
+alias timeUTC="sudo ln -sf /usr/share/zoneinfo/UTC /etc/localtime"
 
 # File size
 alias fs="stat -f \"%z bytes\""
