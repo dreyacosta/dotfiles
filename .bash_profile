@@ -24,5 +24,5 @@ export LANG="en_US"
 # You could just use `-g` instead, but I like being explicit
 complete -W "NSGlobalDomain" defaults
 
-# JAVA
-export JAVA_HOME=$(/usr/libexec/java_home)
+# Homebrew
+export PATH="/usr/local/sbin:$PATH"

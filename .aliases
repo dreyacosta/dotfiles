@@ -9,14 +9,12 @@ alias -- -="cd -"
 
 # programs
 alias slt='open -a "Sublime Text"'
-# also/or do this:
-# ln -s "/Applications/Sublime Text 2.app/Contents/SharedSupport/bin/subl" ~/bin/subl
-
+alias vi='mvim -v'
+alias tat="~/tat"
 
 # be nice
 alias please=sudo
 alias hosts='sudo $EDITOR /etc/hosts'   # yes I occasionally 127.0.0.1 twitter.com ;)
-
 
 # Detect which `ls` flavor is in use
 if ls --color > /dev/null 2>&1; then # GNU `ls`
@@ -31,7 +29,6 @@ alias ll="ls -l ${colorflag}"
 
 # List all files colorized in long format, including dot files
 alias la="ls -la ${colorflag}"
-
 
 # List only directories
 alias lsd='ls -l | grep "^d"'
@@ -83,13 +80,11 @@ alias trimcopy="tr -d '\n' | pbcopy"
 
 # Recursively delete `.DS_Store` files
 alias cleanup="find . -name '*.DS_Store' -type f -ls -delete"
+alias swpup="find . -name '*.swp' -type f -ls -delete"
 
 # Shortcuts
 alias g="git"
 alias v="vim"
-
-# MongoDB
-alias mongod="ulimit -n 2048 && mongod --dbpath /usr/local/var/mongodb/ --replSet 'rs0'"
 
 # Time
 alias timeUTC="sudo ln -sf /usr/share/zoneinfo/UTC /etc/localtime"
@@ -106,7 +101,6 @@ alias emptytrash="sudo rm -rfv /Volumes/*/.Trashes; rm -rfv ~/.Trash"
 # Hide/show all desktop icons (useful when presenting)
 alias hidedesktop="defaults write com.apple.finder CreateDesktop -bool false && killall Finder"
 alias showdesktop="defaults write com.apple.finder CreateDesktop -bool true && killall Finder"
-
 
 # PlistBuddy alias, because sometimes `defaults` just doesn’t cut it
 alias plistbuddy="/usr/libexec/PlistBuddy"

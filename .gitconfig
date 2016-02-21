@@ -10,6 +10,7 @@
 [core]
     excludesfile = ~/.gitignore
     attributesfile = ~/.gitattributes
+    autocrlf = input
 [color "branch"]
     current = yellow reverse
     local = yellow
@@ -25,3 +26,10 @@
     untracked = cyan
 [merge]
     log = true
+[user]
+    name = David Rey
+    email = david.rey.acosta@gmail.com
+[filter "lfs"]
+    clean = git lfs clean %f
+    smudge = git lfs smudge %f
+    required = true
