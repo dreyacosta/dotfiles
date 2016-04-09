@@ -6,7 +6,12 @@ function md() {
 
 # find shorthand
 function f() {
-    find . -name "$1"
+  find . -iname \*$1\* -not -path "./node_modules/**/*"
+}
+
+# grep with color and without node modules
+function search() {
+  grep -rin --color --exclude-dir=node_modules "$1" *
 }
 
 # cd into whatever is the forefront Finder window.

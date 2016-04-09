@@ -24,5 +24,26 @@ export LANG="en_US"
 # You could just use `-g` instead, but I like being explicit
 complete -W "NSGlobalDomain" defaults
 
+# NVM
+export NVM_DIR=~/.nvm
+. $(brew --prefix nvm)/nvm.sh
+
 # Homebrew
 export PATH="/usr/local/sbin:$PATH"
+
+# Docker machine
+if [ $(docker-machine status) = "Running" ]; then
+  eval $(docker-machine env)
+fi
+
+# Check .nvmrc file
+function enter_directory() {
+  if [ "$PWD" != "$PREV_PWD" ]; then
+    PREV_PWD="$PWD"
+    if [[ -f .nvmrc && -r .nvmrc ]]; then
+      nvm use
+    fi
+  fi
+}
+
+export PROMPT_COMMAND=enter_directory
