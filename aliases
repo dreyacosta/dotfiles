@@ -8,7 +8,7 @@ alias ~="cd ~" # `cd` is probably faster to type though
 alias -- -="cd -"
 
 # programs
-alias slt='open -a "Sublime Text"'
+alias slt='open -a "Sublime\ Text"'
 alias vi='mvim -v'
 alias tat="~/tat"
 
