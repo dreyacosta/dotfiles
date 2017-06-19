@@ -7,8 +7,8 @@ set rtp+=~/.vim/bundle/Vundle.vim
 call vundle#begin()
 
 " Plugin 'Shutnik/jshint2.vim'
-Plugin 'wookiehangover/jshint.vim'
-" Plugin 'scrooloose/syntastic'
+" Plugin 'wookiehangover/jshint.vim'
+Plugin 'scrooloose/syntastic'
 " Plugin 'FelikZ/ctrlp-py-matcher'
 Plugin 'kien/ctrlp.vim'
 Plugin 'pangloss/vim-javascript'

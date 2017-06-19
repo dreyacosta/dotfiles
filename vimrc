@@ -92,6 +92,8 @@ map <C-K> <C-w>k
 map <C-H> <C-w>h
 map <C-L> <C-w>w
 
+map <C-B> <esc>:CtrlPBuffer<cr>
+
 " Increment / decrement vertical split size
 map ++ :vertical resize +5<cr>
 map -- :vertical resize -5<cr>
@@ -105,7 +107,8 @@ map <C-n> :NERDTreeToggle<CR>
 " Plugin stuffs
 " let g:ctrlp_custom_ignore = { 'dir':  '\v[\/]\.(git|hg|svn)|node_modules$' }
 " let g:ctrlp_match_func = { 'match': 'pymatcher#PyMatch' }
-" let g:syntastic_javascript_checkers=['jscs']
+let g:syntastic_javascript_checkers=['eslint']
+" let g:loaded_syntastic_javascript_eslint_checker = 1
 "let g:netrw_liststyle = 3
 let g:airline_powerline_fonts = 1
 
