@@ -25,6 +25,7 @@ main() {
     nvim
     mise
     tmux-sessionizer
+    starship.toml
   )
 
   dotfiles-install "omarchy" "${files[@]}" --config-dirs "${config_dirs[@]}"
