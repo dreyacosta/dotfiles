@@ -1,0 +1,29 @@
+# Create a new directory and enter it
+function md() {
+  mkdir -p "$@" && cd "$@"
+}
+
+function dockersoftcleanup() {
+  echo "Delete all 'untagged/dangling' (<none>) images"
+  docker rmi $(docker images -q -f dangling=true)
+}
+
+function dockercleanup() {
+  echo "Kill all running containers"
+  docker kill $(docker ps -q)
+
+  echo "Delete all stopped containers (including data-only containers)"
+  docker rm $(docker ps -a -q)
+
+  echo "Delete all 'untagged/dangling' (<none>) images"
+  docker rmi $(docker images -q -f dangling=true)
+}
+
+function dockercleanupvolumes() {
+  docker volume rm $(docker volume ls -qf dangling=true)
+}
+
+function dockercleanupimages() {
+  echo "Delete all images"
+  docker rmi -f $(docker images -q)
+}

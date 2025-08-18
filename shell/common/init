@@ -1,5 +1,0 @@
-# History control
-shopt -s histappend
-HISTCONTROL=ignoreboth
-HISTSIZE=32768
-HISTFILESIZE="${HISTSIZE}"
