@@ -2,6 +2,7 @@
 
 set -euo pipefail
 
+export PATH="./bin:$HOME/.local/bin:$PATH"
 readonly SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
 readonly BIN_DIR="$SCRIPT_DIR/bin"
 
