@@ -23,6 +23,7 @@ main() {
   local -r config_dirs=(
     alacritty
     nvim
+    mise
   )
 
   dotfiles-install "omarchy" "${files[@]}" --config-dirs "${config_dirs[@]}"
