@@ -1,0 +1,29 @@
+#!/bin/bash
+
+readonly CONFIG_DIR="$HOME/.config"
+
+config_dirs=("$@")
+failed_items=()
+
+if [[ ! -d "$CONFIG_DIR" ]]; then
+  dotfiles-log "Creating .config directory: $CONFIG_DIR"
+  mkdir -p "$CONFIG_DIR"
+fi
+
+for config_name in "${config_dirs[@]}"; do
+  target_path="$CONFIG_DIR/$config_name"
+  backup_path="config/$config_name"
+
+  dotfiles-create-backup "$target_path" "$backup_path" || dotfiles-log "No existing config to backup for $config_name"
+
+  if dotfiles-create-symlink "config/$config_name" "$target_path"; then
+    dotfiles-log "✓ Successfully processed config: $config_name"
+  else
+    dotfiles-log "✗ Failed to process config: $config_name"
+    failed_items+=("config/$config_name")
+  fi
+done
+
+if [[ ${#failed_items[@]} -gt 0 ]]; then
+  exit 1
+fi

@@ -1,0 +1,24 @@
+#!/bin/bash
+
+readonly BACKUP_DIR="$HOME/dotfiles-bak"
+
+target_path="$1"
+backup_path="$2"
+
+if [[ ! -e "$target_path" ]]; then
+  exit 1
+fi
+
+if [[ ! -d "$BACKUP_DIR" ]]; then
+  dotfiles-log "Creating backup directory: $BACKUP_DIR"
+  mkdir -p "$BACKUP_DIR"
+fi
+
+file_type="file"
+[[ -L "$target_path" ]] && file_type="symlink"
+[[ -d "$target_path" ]] && file_type="directory"
+
+dotfiles-log "Backing up existing $file_type: $target_path"
+mkdir -p "$(dirname "$BACKUP_DIR/$backup_path")"
+mv "$target_path" "$BACKUP_DIR/$backup_path"
+dotfiles-log "Backup created: $BACKUP_DIR/$backup_path"

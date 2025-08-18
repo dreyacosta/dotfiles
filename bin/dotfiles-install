@@ -1,0 +1,47 @@
+#!/bin/bash
+
+readonly BACKUP_DIR="$HOME/dotfiles-bak"
+
+platform="$1"
+shift
+files=("$@")
+
+config_dirs=()
+new_files=()
+found_config_separator=false
+
+for arg in "${files[@]}"; do
+  if [[ "$arg" == "--config-dirs" ]]; then
+    found_config_separator=true
+    continue
+  fi
+
+  if [[ "$found_config_separator" == true ]]; then
+    config_dirs+=("$arg")
+  else
+    new_files+=("$arg")
+  fi
+done
+
+files=("${new_files[@]}")
+
+dotfiles-log "Starting dotfiles installation for $platform"
+dotfiles-log "Backup directory: $BACKUP_DIR"
+
+files_failed=false
+configs_failed=false
+
+if ! dotfiles-install-files "${files[@]}"; then
+  files_failed=true
+fi
+
+if ! dotfiles-install-config "${config_dirs[@]}"; then
+  configs_failed=true
+fi
+
+if [[ "$files_failed" == false && "$configs_failed" == false ]]; then
+  dotfiles-log "✓ All dotfiles installed successfully!"
+else
+  dotfiles-log "✗ Installation completed with errors"
+  exit 1
+fi

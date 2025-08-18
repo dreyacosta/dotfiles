@@ -1,0 +1,23 @@
+#!/bin/bash
+
+files=("$@")
+failed_items=()
+
+for file in "${files[@]}"; do
+  filename="$(basename "$file")"
+  target_path="$HOME/.$filename"
+  backup_name="${filename}.bak"
+
+  dotfiles-create-backup "$target_path" "$backup_name" || dotfiles-log "No existing file to backup for .$filename"
+
+  if dotfiles-create-symlink "$file" "$target_path"; then
+    dotfiles-log "✓ Successfully processed file: $file"
+  else
+    dotfiles-log "✗ Failed to process file: $file"
+    failed_items+=("$file")
+  fi
+done
+
+if [[ ${#failed_items[@]} -gt 0 ]]; then
+  exit 1
+fi

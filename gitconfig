@@ -1,35 +1,47 @@
 [alias]
-    c = commit -am
-    up = pull
-    p = push
-    s = status -s
-    df = diff --color --color-words --abbrev
-    lg = log --color --graph --pretty=format:'%Cred%h%Creset -%C(yellow)%d%Creset %s %Cgreen(%cr) %C(bold blue)<%an>%Creset' --abbrev-commit --
-[color]
-    ui = always
+  c = commit -am
+  up = pull
+  p = push
+  s = status -s
+  df = diff --color --color-words --abbrev
+  lg = log --color --graph --pretty=format:'%Cred%h%Creset -%C(yellow)%d%Creset %s %Cgreen(%cr) %C(bold blue)<%an>%Creset' --abbrev-commit --
+	co = checkout
+	br = branch
+	ci = commit
+	st = status
+[cor]
+  ui = always
 [core]
-    excludesfile = ~/.gitignore
-    attributesfile = ~/.gitattributes
-    autocrlf = input
+  excludesfile = ~/.gitignore
+  attributesfile = ~/.gitattributes
+  autocrlf = input
 [color "branch"]
-    current = yellow reverse
-    local = yellow
-    remote = green
+  current = yellow reverse
+  local = yellow
+  remote = green
 [color "diff"]
-    meta = yellow bold
-    frag = magenta bold
-    old = red bold
-    new = green bold
+  meta = yellow bold
+  frag = magenta bold
+  old = red bold
+  new = green bold
 [color "status"]
-    added = yellow
-    changed = green
-    untracked = cyan
+  added = yellow
+  changed = green
+  untracked = cyan
 [merge]
-    log = true
+  log = true
 [user]
-    name = David Rey
-    email = david.rey.acosta@gmail.com
+  name = David Rey
+	email = david.rey.acosta@gmail.com
 [filter "lfs"]
-    clean = git lfs clean %f
-    smudge = git lfs smudge %f
-    required = true
+  clean = git lfs clean %f
+  smudge = git lfs smudge %f
+  required = true
+[credential]
+  helper = osxkeychain
+[pull]
+	rebase = true
+[fetch]
+	prune = true
+[url "ssh://git@github.com/"]
+ insteadOf = https://github.com/

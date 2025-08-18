@@ -1,0 +1,9 @@
+source ~/Projects/dotfiles/shell/common/init
+source ~/Projects/dotfiles/shell/common/history-refresh
+source ~/Projects/dotfiles/shell/common/aliases
+source ~/Projects/dotfiles/shell/zsh/init
+source ~/Projects/dotfiles/shell/zsh/completions
+source ~/Projects/dotfiles/macos/nvm
+source ~/Projects/dotfiles/shell/common/envs
+[[ $- == *i* ]] && bind -f ~/Projects/dotfiles/shell/common/inputrc
+source ~/Projects/dotfiles/shell/common/tmux

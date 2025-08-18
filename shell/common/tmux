@@ -1,0 +1,4 @@
+# Load tmux
+if command -v tmux &>/dev/null && [ -z "$TMUX" ]; then
+  tmux a || tmux new-session -s dreyacosta
+fi

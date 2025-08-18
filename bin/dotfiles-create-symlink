@@ -1,0 +1,14 @@
+#!/bin/bash
+
+readonly SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")/.." && pwd)"
+
+source_path="$1"
+target_path="$2"
+
+if [[ ! -e "$SCRIPT_DIR/$source_path" ]]; then
+  dotfiles-log "ERROR: Source not found: $SCRIPT_DIR/$source_path"
+  exit 1
+fi
+
+dotfiles-log "Creating symlink: $target_path -> $SCRIPT_DIR/$source_path"
+ln -sfn "$SCRIPT_DIR/$source_path" "$target_path"
