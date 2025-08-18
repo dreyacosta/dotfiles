@@ -1,0 +1,48 @@
+# --- Ensure Zsh completion is on ---
+autoload -Uz compinit
+compinit
+
+# Use Emacs-style keymaps (so the bindings below match what you're used to)
+bindkey -e
+
+# completion-ignore-case on
+zstyle ':completion:*' matcher-list 'm:{a-z}={A-Z}'
+
+# show-all-if-ambiguous on  (list matches immediately and allow selection)
+setopt AUTO_LIST
+zstyle ':completion:*' menu yes select
+
+# show-all-if-unmodified on  (closest: always show menu even on first hit)
+# (covered by the menu style above)
+
+# Immediately add trailing / when completing directories
+# (Readline had a special case for *symlinked* dirs; Zsh does it for all dirs)
+setopt AUTO_PARAM_SLASH
+setopt MARK_DIRS
+
+# Do not autocomplete hidden files unless the pattern begins with '.'
+# (This is Zsh's default; nothing to do. If you ever changed it:)
+# zstyle ':completion:*' match-hidden only
+
+# Show all autocomplete results at once (no pager)
+zstyle ':completion:*' list-pager ''
+
+# Ask before listing if more than N items
+zstyle ':completion:*' list-max 200
+
+# Show extra file info like `ls -F`
+setopt LIST_TYPES
+
+# Be more intelligent by considering text after cursor (skip-completed-text)
+setopt COMPLETE_IN_WORD
+
+# Colored completion listings (reuse LS_COLORS if set)
+zstyle ':completion:*' list-colors "${(s.:.)LS_COLORS}"
+
+# Arrow keys:
+# - Up/Down: search history for lines that start with what's before the cursor
+# - Left/Right: move cursor
+bindkey '^[[A' history-beginning-search-backward
+bindkey '^[[B' history-beginning-search-forward
+bindkey '^[[C' forward-char
+bindkey '^[[D' backward-char
