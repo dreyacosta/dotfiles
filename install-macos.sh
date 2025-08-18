@@ -22,6 +22,7 @@ main() {
 
   local -r config_dirs=(
     nvim
+    tmux-sessionizer
   )
 
   dotfiles-install "macOS" "${files[@]}" --config-dirs "${config_dirs[@]}"

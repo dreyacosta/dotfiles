@@ -24,6 +24,7 @@ main() {
     alacritty
     nvim
     mise
+    tmux-sessionizer
   )
 
   dotfiles-install "omarchy" "${files[@]}" --config-dirs "${config_dirs[@]}"
