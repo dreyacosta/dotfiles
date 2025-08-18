@@ -24,6 +24,7 @@ main() {
     nvim
     tmux-sessionizer
     starship.toml
+    karabiner
   )
 
   dotfiles-install "macOS" "${files[@]}" --config-dirs "${config_dirs[@]}"
