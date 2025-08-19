@@ -39,7 +39,7 @@ while [[ $# -gt 0 ]]; do
       etc_args+=("$1")
       shift
     done
-    dotfiles-install-config-etc "${etc_args[@]}" || has_errors=true
+    dotfiles-install-etc "${etc_args[@]}" || has_errors=true
     continue
     ;;
   *)
