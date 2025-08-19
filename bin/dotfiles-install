@@ -4,56 +4,53 @@ readonly BACKUP_DIR="$HOME/dotfiles-bak"
 
 platform="$1"
 shift
-files=("$@")
-
-config_dirs=()
-etc_dirs=()
-new_files=()
-found_config_separator=false
-found_etc_separator=false
-
-for arg in "${files[@]}"; do
-  if [[ "$arg" == "--config-dirs" ]]; then
-    found_config_separator=true
-    found_etc_separator=false
-    continue
-  elif [[ "$arg" == "--etc-dirs" ]]; then
-    found_etc_separator=true
-    found_config_separator=false
-    continue
-  fi
-
-  if [[ "$found_config_separator" == true ]]; then
-    config_dirs+=("$arg")
-  elif [[ "$found_etc_separator" == true ]]; then
-    etc_dirs+=("$arg")
-  else
-    new_files+=("$arg")
-  fi
-done
-
-files=("${new_files[@]}")
 
 dotfiles-log "Starting dotfiles installation for $platform"
 dotfiles-log "Backup directory: $BACKUP_DIR"
 
-files_failed=false
-configs_failed=false
-etc_failed=false
+has_errors=false
 
-if ! dotfiles-install-files "${files[@]}"; then
-  files_failed=true
-fi
+while [[ $# -gt 0 ]]; do
+  case "$1" in
+  --dotfiles)
+    shift
+    dotfile_args=()
+    while [[ $# -gt 0 && ! "$1" =~ ^-- ]]; do
+      dotfile_args+=("$1")
+      shift
+    done
+    dotfiles-install-files "${dotfile_args[@]}" || has_errors=true
+    continue
+    ;;
+  --config-dirs)
+    shift
+    config_args=()
+    while [[ $# -gt 0 && ! "$1" =~ ^-- ]]; do
+      config_args+=("$1")
+      shift
+    done
+    dotfiles-install-config "${config_args[@]}" || has_errors=true
+    continue
+    ;;
+  --etc-dirs)
+    shift
+    etc_args=()
+    while [[ $# -gt 0 && ! "$1" =~ ^-- ]]; do
+      etc_args+=("$1")
+      shift
+    done
+    dotfiles-install-config-etc "${etc_args[@]}" || has_errors=true
+    continue
+    ;;
+  *)
+    dotfiles-log "Unknown argument: $1"
+    has_errors=true
+    ;;
+  esac
+  shift
+done
 
-if ! dotfiles-install-config "${config_dirs[@]}"; then
-  configs_failed=true
-fi
-
-if [[ ${#etc_dirs[@]} -gt 0 ]] && ! dotfiles-install-config-etc "${etc_dirs[@]}"; then
-  etc_failed=true
-fi
-
-if [[ "$files_failed" == false && "$configs_failed" == false && "$etc_failed" == false ]]; then
+if [[ "$has_errors" == false ]]; then
   dotfiles-log "✓ All dotfiles installed successfully!"
 else
   dotfiles-log "✗ Installation completed with errors"

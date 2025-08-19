@@ -32,11 +32,7 @@ main() {
     # Example: dhcp/dhcpd.conf
   )
 
-  if [[ ${#etc_dirs[@]} -gt 0 ]]; then
-    dotfiles-install "macOS" "${files[@]}" --config-dirs "${config_dirs[@]}" --etc-dirs "${etc_dirs[@]}"
-  else
-    dotfiles-install "macOS" "${files[@]}" --config-dirs "${config_dirs[@]}"
-  fi
+  dotfiles-install "macOS" --dotfiles "${files[@]}" --config-dirs "${config_dirs[@]}" --etc-dirs "${etc_dirs[@]}"
 }
 
 if [[ "${BASH_SOURCE[0]}" == "${0}" ]]; then

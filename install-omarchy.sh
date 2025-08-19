@@ -33,11 +33,7 @@ main() {
     keyd
   )
 
-  if [[ ${#etc_dirs[@]} -gt 0 ]]; then
-    dotfiles-install "omarchy" "${files[@]}" --config-dirs "${config_dirs[@]}" --etc-dirs "${etc_dirs[@]}"
-  else
-    dotfiles-install "omarchy" "${files[@]}" --config-dirs "${config_dirs[@]}"
-  fi
+  dotfiles-install "omarchy" --dotfiles "${files[@]}" --config-dirs "${config_dirs[@]}" --etc-dirs "${etc_dirs[@]}"
 }
 
 if [[ "${BASH_SOURCE[0]}" == "${0}" ]]; then
