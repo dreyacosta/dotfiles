@@ -27,7 +27,16 @@ main() {
     karabiner
   )
 
-  dotfiles-install "macOS" "${files[@]}" --config-dirs "${config_dirs[@]}"
+  local -r etc_dirs=(
+    # Add etc directories here when needed
+    # Example: dhcp/dhcpd.conf
+  )
+
+  if [[ ${#etc_dirs[@]} -gt 0 ]]; then
+    dotfiles-install "macOS" "${files[@]}" --config-dirs "${config_dirs[@]}" --etc-dirs "${etc_dirs[@]}"
+  else
+    dotfiles-install "macOS" "${files[@]}" --config-dirs "${config_dirs[@]}"
+  fi
 }
 
 if [[ "${BASH_SOURCE[0]}" == "${0}" ]]; then

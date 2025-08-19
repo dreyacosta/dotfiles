@@ -1,0 +1,29 @@
+#!/bin/bash
+
+readonly CONFIG_DIR="/etc"
+
+config_dirs=("$@")
+failed_items=()
+
+if [[ ! -d "$CONFIG_DIR" ]]; then
+  dotfiles-log "Creating etc directory: $CONFIG_DIR"
+  mkdir -p "$CONFIG_DIR"
+fi
+
+for config_name in "${config_dirs[@]}"; do
+  target_path="$CONFIG_DIR/$config_name"
+  backup_path="etc/$config_name"
+
+  dotfiles-create-backup "$target_path" "$backup_path" || dotfiles-log "No existing etc to backup for $config_name"
+
+  if dotfiles-create-symlink "etc/$config_name" "$target_path"; then
+    dotfiles-log "✓ Successfully processed etc: $config_name"
+  else
+    dotfiles-log "✗ Failed to process etc: $config_name"
+    failed_items+=("etc/$config_name")
+  fi
+done
+
+if [[ ${#failed_items[@]} -gt 0 ]]; then
+  exit 1
+fi
