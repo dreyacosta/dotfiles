@@ -11,4 +11,10 @@ if [[ ! -e "$SCRIPT_DIR/$source_path" ]]; then
 fi
 
 dotfiles-log "Creating symlink: $target_path -> $SCRIPT_DIR/$source_path"
-ln -sfn "$SCRIPT_DIR/$source_path" "$target_path"
+
+# Use sudo for ln if we need elevated permissions
+if [[ -w "$(dirname "$target_path")" ]]; then
+  ln -sfn "$SCRIPT_DIR/$source_path" "$target_path"
+else
+  sudo ln -sfn "$SCRIPT_DIR/$source_path" "$target_path"
+fi
