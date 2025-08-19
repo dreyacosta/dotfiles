@@ -5,10 +5,10 @@
   s = status -s
   df = diff --color --color-words --abbrev
   lg = log --color --graph --pretty=format:'%Cred%h%Creset -%C(yellow)%d%Creset %s %Cgreen(%cr) %C(bold blue)<%an>%Creset' --abbrev-commit --
-	co = checkout
-	br = branch
-	ci = commit
-	st = status
+  co = checkout
+  br = branch
+  ci = commit
+  st = status
 [cor]
   ui = always
 [core]
@@ -32,7 +32,7 @@
   log = true
 [user]
   name = David Rey
-	email = david.rey.acosta@gmail.com
+  email = david.rey.acosta@gmail.com
 [filter "lfs"]
   clean = git lfs clean %f
   smudge = git lfs smudge %f
@@ -40,8 +40,8 @@
 [credential]
   helper = osxkeychain
 [pull]
-	rebase = true
+  rebase = true
 [fetch]
-	prune = true
+  prune = true
 [url "ssh://git@github.com/"]
- insteadOf = https://github.com/
+  insteadOf = https://github.com/
