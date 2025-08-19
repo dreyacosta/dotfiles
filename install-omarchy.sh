@@ -26,6 +26,7 @@ main() {
     mise
     tmux-sessionizer
     starship.toml
+    hypr
   )
 
   dotfiles-install "omarchy" "${files[@]}" --config-dirs "${config_dirs[@]}"
