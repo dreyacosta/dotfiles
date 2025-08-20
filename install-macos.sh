@@ -25,14 +25,16 @@ main() {
     tmux-sessionizer
     starship.toml
     karabiner
+    ghostty
   )
 
-  local -r etc_dirs=(
-    # Add etc directories here when needed
-    # Example: dhcp/dhcpd.conf
-  )
+  # local -r etc_dirs=(
+  #   # Add etc directories here when needed
+  #   # Example: dhcp/dhcpd.conf
+  # )
 
-  dotfiles-install "macOS" --dotfiles "${files[@]}" --config-dirs "${config_dirs[@]}" --etc-dirs "${etc_dirs[@]}"
+  dotfiles-install "macOS" --dotfiles "${files[@]}" --config-dirs "${config_dirs[@]}"
+  # --etc-dirs "${etc_dirs[@]}"
 }
 
 if [[ "${BASH_SOURCE[0]}" == "${0}" ]]; then

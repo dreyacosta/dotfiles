@@ -2,8 +2,25 @@
 
 readonly CONFIG_DIR="$HOME/.config"
 
+platform="$1"
+shift
 config_dirs=("$@")
 failed_items=()
+
+get_config_target_path() {
+  local platform="$1"
+  local config_name="$2"
+
+  # Special cases for non-standard config paths
+  case "$platform-$config_name" in
+  "macOS-ghostty")
+    echo "$HOME/Library/Application Support/com.mitchellh.ghostty"
+    ;;
+  *)
+    echo "$CONFIG_DIR/$config_name"
+    ;;
+  esac
+}
 
 if [[ ! -d "$CONFIG_DIR" ]]; then
   dotfiles-log "Creating .config directory: $CONFIG_DIR"
@@ -11,8 +28,15 @@ if [[ ! -d "$CONFIG_DIR" ]]; then
 fi
 
 for config_name in "${config_dirs[@]}"; do
-  target_path="$CONFIG_DIR/$config_name"
+  target_path="$(get_config_target_path "$platform" "$config_name")"
   backup_path="config/$config_name"
+
+  # Create target directory if it doesn't exist
+  target_dir="$(dirname "$target_path")"
+  if [[ ! -d "$target_dir" ]]; then
+    dotfiles-log "Creating target directory: $target_dir"
+    mkdir -p "$target_dir"
+  fi
 
   dotfiles-create-backup "$target_path" "$backup_path" || dotfiles-log "No existing config to backup for $config_name"
 

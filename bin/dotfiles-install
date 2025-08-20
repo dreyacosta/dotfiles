@@ -29,7 +29,7 @@ while [[ $# -gt 0 ]]; do
       config_args+=("$1")
       shift
     done
-    dotfiles-install-config "${config_args[@]}" || has_errors=true
+    dotfiles-install-config "$platform" "${config_args[@]}" || has_errors=true
     continue
     ;;
   --etc-dirs)

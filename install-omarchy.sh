@@ -27,6 +27,7 @@ main() {
     tmux-sessionizer
     starship.toml
     hypr
+    ghostty
   )
 
   local -r etc_dirs=(
