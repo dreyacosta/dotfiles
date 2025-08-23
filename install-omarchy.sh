@@ -17,6 +17,7 @@ main() {
     gitignore
     ideavimrc
     tmux.conf
+    cspell.json
     omarchy/bashrc
   )
 
