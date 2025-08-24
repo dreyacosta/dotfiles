@@ -29,6 +29,7 @@ main() {
     starship.toml
     hypr
     ghostty
+    walker
   )
 
   local -r etc_dirs=(
