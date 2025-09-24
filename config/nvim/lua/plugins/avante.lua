@@ -17,7 +17,7 @@ return {
         },
       },
       claude = {
-        model = "claude-opus-4-0",
+        model = "claude-sonnet-4-0",
         extra_request_body = {
           max_tokens = 32000,
         },
