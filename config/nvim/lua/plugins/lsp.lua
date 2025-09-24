@@ -1,6 +1,4 @@
 return {
-  { "mason-org/mason.nvim", version = "^1.0.0" },
-  { "mason-org/mason-lspconfig.nvim", version = "^1.0.0" },
   {
     "neovim/nvim-lspconfig",
     opts = {
@@ -69,7 +67,7 @@ return {
           if has_eslint_config() then
             vim.api.nvim_create_autocmd("BufWritePre", {
               pattern = { "*.tsx", "*.ts", "*.jsx", "*.js" },
-              command = "EslintFixAll",
+              command = "LspEslintFixAll",
             })
           end
         end,
