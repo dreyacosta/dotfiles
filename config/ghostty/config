@@ -15,7 +15,7 @@ adjust-cell-height = 7
 macos-titlebar-style = hidden
 window-padding-balance = true
 window-save-state = always
-theme = Tokyionight Night
+theme = Tokyonight Night
 
 # Cursor styling
 cursor-style = "block"
