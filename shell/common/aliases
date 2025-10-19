@@ -37,4 +37,4 @@ alias vi="nvim"
 alias cleanup="find . -name '*.DS_Store' -type f -ls -delete"
 alias swpup="find . -name '*.swp' -type f -ls -delete"
 
-alias forcedot="sudo ~/Projects/dotfiles/shell/common/scripts/force-dot.sh"
+alias forcedot="sudo ~/Projects/dotfiles/shell/common/scripts/force-dot.sh $DNS4_1 $DNS4_2"
