@@ -22,14 +22,12 @@ main() {
   )
 
   local -r config_dirs=(
-    alacritty
     nvim
     mise
     tmux-sessionizer
     starship.toml
     hypr
     ghostty
-    walker
   )
 
   local -r etc_dirs=(
