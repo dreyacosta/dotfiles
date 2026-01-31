@@ -1,0 +1,9 @@
+source ~/Projects/dotfiles/shell/common/envs
+source ~/Projects/dotfiles/shell/common/history-refresh
+source ~/Projects/dotfiles/shell/common/aliases
+source ~/Projects/dotfiles/shell/common/functions
+source ~/Projects/dotfiles/shell/bash/brew
+source ~/Projects/dotfiles/shell/bash/mise
+source ~/Projects/dotfiles/shell/bash/fzf
+source ~/Projects/dotfiles/shell/bash/init
+source ~/Projects/dotfiles/shell/common/tmux

@@ -4,3 +4,14 @@ export SUDO_EDITOR="$EDITOR"
 if [[ -f ~/.envs ]]; then
   source ~/.envs
 fi
+
+# opencode
+if [[ -n "${OPENCODE_INSTALL_DIR:-}" && -d "$OPENCODE_INSTALL_DIR" ]]; then
+  export PATH="$OPENCODE_INSTALL_DIR:$PATH"
+elif [[ -n "${XDG_BIN_DIR:-}" && -d "$XDG_BIN_DIR" ]]; then
+  export PATH="$XDG_BIN_DIR:$PATH"
+elif [[ -d "$HOME/bin" ]]; then
+  export PATH="$HOME/bin:$PATH"
+elif [[ -d "$HOME/.opencode/bin" ]]; then
+  export PATH="$HOME/.opencode/bin:$PATH"
+fi
