@@ -63,7 +63,7 @@ ga() {
 # Remove worktree and branch from within active worktree directory.
 gd() {
   if gum confirm "Remove worktree and branch?"; then
-    local cwd base branch root session
+    local cwd base branch root session root_session root_path attach_root
 
     cwd="$(pwd)"
     worktree="$(basename "$cwd")"
@@ -72,16 +72,40 @@ gd() {
     root="${worktree%%--*}"
     branch="${worktree#*--}"
     session="${root}--${branch}"
+    root_session="$root"
+    root_path="../$root"
+    attach_root=false
 
     # Protect against accidentially nuking a non-worktree directory
     if [[ "$root" != "$worktree" ]]; then
+      cd "$root_path"
+
+      if tmux has-session -t "$root_session" 2>/dev/null; then
+        if [[ -n "${TMUX:-}" ]]; then
+          tmux switch-client -t "$root_session"
+        else
+          attach_root=true
+        fi
+      else
+        if [[ -n "${TMUX:-}" ]]; then
+          tmux new-session -ds "$root_session" -c "$root_path"
+          tmux switch-client -t "$root_session"
+        else
+          tmux new-session -ds "$root_session" -c "$root_path"
+          attach_root=true
+        fi
+      fi
+
+      git worktree remove "$worktree" --force
+      git branch -D "$branch"
+
       if tmux has-session -t "$session" 2>/dev/null; then
         tmux kill-session -t "$session"
       fi
 
-      cd "../$root"
-      git worktree remove "$worktree" --force
-      git branch -D "$branch"
+      if [[ "$attach_root" == true ]]; then
+        tmux attach -t "$root_session"
+      fi
     fi
   fi
 }
