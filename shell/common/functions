@@ -27,3 +27,61 @@ function dockercleanupimages() {
   echo "Delete all images"
   docker rmi -f $(docker images -q)
 }
+
+# Create a new worktree and branch from within current git directory.
+ga() {
+  if [[ -z "$1" ]]; then
+    echo "Usage: ga [branch name]"
+    exit 1
+  fi
+
+  local branch="$1"
+  local base="$(basename "$PWD")"
+  local path="../${base}--${branch}"
+  local session="${base}--${branch}"
+
+  git worktree add -b "$branch" "$path"
+  mise trust "$path"
+
+  if tmux has-session -t "$session" 2>/dev/null; then
+    if [[ -n "${TMUX:-}" ]]; then
+      tmux switch-client -t "$session"
+    else
+      tmux attach -t "$session"
+    fi
+    return
+  fi
+
+  if [[ -n "${TMUX:-}" ]]; then
+    tmux new-session -ds "$session" -c "$path"
+    tmux switch-client -t "$session"
+  else
+    tmux new-session -s "$session" -c "$path"
+  fi
+}
+
+# Remove worktree and branch from within active worktree directory.
+gd() {
+  if gum confirm "Remove worktree and branch?"; then
+    local cwd base branch root session
+
+    cwd="$(pwd)"
+    worktree="$(basename "$cwd")"
+
+    # split on first `--`
+    root="${worktree%%--*}"
+    branch="${worktree#*--}"
+    session="${root}--${branch}"
+
+    # Protect against accidentially nuking a non-worktree directory
+    if [[ "$root" != "$worktree" ]]; then
+      if tmux has-session -t "$session" 2>/dev/null; then
+        tmux kill-session -t "$session"
+      fi
+
+      cd "../$root"
+      git worktree remove "$worktree" --force
+      git branch -D "$branch"
+    fi
+  fi
+}
