@@ -88,7 +88,7 @@ install_brew_packages() {
   fi
 
   brew install gcc
-  brew install tmux fzf mise
+  brew install tmux fzf mise gum
 }
 
 install_tmux_sessionizer() {
