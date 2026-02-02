@@ -35,49 +35,49 @@ ga() {
     exit 1
   fi
 
-  local branch="$1"
-  local base="$(basename "$PWD")"
-  local path="../${base}--${branch}"
-  local session="${base}--${branch}"
+  local branch_name="$1"
+  local base_name="$(basename "$PWD")"
+  local worktree_path="../${base_name}--${branch_name}"
+  local session_name="${base_name}--${branch_name}"
 
-  git worktree add -b "$branch" "$path"
-  mise trust "$path"
+  git worktree add -b "$branch_name" "$worktree_path"
+  mise trust "$worktree_path "
 
-  if tmux has-session -t "$session" 2>/dev/null; then
+  if tmux has-session -t "$session_name" 2>/dev/null; then
     if [[ -n "${TMUX:-}" ]]; then
-      tmux switch-client -t "$session"
+      tmux switch-client -t "$session_name"
     else
-      tmux attach -t "$session"
+      tmux attach -t "$session_name"
     fi
     return
   fi
 
   if [[ -n "${TMUX:-}" ]]; then
-    tmux new-session -ds "$session" -c "$path"
-    tmux switch-client -t "$session"
+    tmux new-session -ds "$session_name" -c "$worktree_path"
+    tmux switch-client -t "$session_name"
   else
-    tmux new-session -s "$session" -c "$path"
+    tmux new-session -s "$session_name" -c "$worktree_path"
   fi
 }
 
 # Remove worktree and branch from within active worktree directory.
 gd() {
   if gum confirm "Remove worktree and branch?"; then
-    local cwd base branch root session root_session root_path attach_root
+    local cwd_path branch_name root_name session_name root_session root_path attach_root
 
-    cwd="$(pwd)"
-    worktree="$(basename "$cwd")"
+    cwd_path="$(pwd)"
+    worktree="$(basename "$cwd_path")"
 
     # split on first `--`
-    root="${worktree%%--*}"
-    branch="${worktree#*--}"
-    session="${root}--${branch}"
-    root_session="$root"
-    root_path="../$root"
+    root_name="${worktree%%--*}"
+    branch_name="${worktree#*--}"
+    session_name="${root_name}--${branch_name}"
+    root_session="$root_name"
+    root_path="../$root_name"
     attach_root=false
 
     # Protect against accidentially nuking a non-worktree directory
-    if [[ "$root" != "$worktree" ]]; then
+    if [[ "$root_name" != "$worktree" ]]; then
       cd "$root_path"
 
       if tmux has-session -t "$root_session" 2>/dev/null; then
@@ -97,10 +97,10 @@ gd() {
       fi
 
       git worktree remove "$worktree" --force
-      git branch -D "$branch"
+      git branch -D "$branch_name"
 
-      if tmux has-session -t "$session" 2>/dev/null; then
-        tmux kill-session -t "$session"
+      if tmux has-session -t "$session_name" 2>/dev/null; then
+        tmux kill-session -t "$session_name"
       fi
 
       if [[ "$attach_root" == true ]]; then
