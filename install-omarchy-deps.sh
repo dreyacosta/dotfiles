@@ -15,7 +15,7 @@ install_homebrew() {
   if command -v brew >/dev/null 2>&1; then
     return
   fi
-
+  export HOMEBREW_FORCE_VENDOR_RUBY=1
   NONINTERACTIVE=1 /bin/bash -c "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/HEAD/install.sh)"
 }
 
