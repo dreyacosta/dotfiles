@@ -4,6 +4,16 @@ return {
     opts = {
       inlay_hints = { enabled = false },
       servers = {
+        ruby_lsp = {
+          mason = false,
+          cmd = { vim.fn.expand("~/Projects/dotfiles/shell/common/scripts/ruby-lsp-launcher.sh") },
+          init_options = {
+            formatter = "rubocop",
+          },
+        },
+        rubocop = {
+          enabled = false,
+        },
         eslint = {
           settings = {
             -- helps eslint find the eslintrc when it's placed in a subfolder instead of the cwd root
