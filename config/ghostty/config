@@ -1,5 +1,5 @@
 # Font
-font-family = "CaskaydiaMono Nerd Font Mono"
+font-family = "JetBrainsMono Nerd Font"
 font-style = Regular
 font-feature = -calt
 font-feature = -liga
@@ -10,7 +10,7 @@ window-theme = ghostty
 confirm-close-surface=false
 resize-overlay = never
 gtk-toolbar-style = flat
-adjust-cell-width = 0
+adjust-cell-width = -1
 adjust-cell-height = 7
 macos-titlebar-style = hidden
 window-padding-balance = true
