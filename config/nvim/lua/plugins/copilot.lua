@@ -17,6 +17,9 @@ return {
         hide_during_completion = false,
         keymap = { accept = "<Tab>" },
       },
+      filetypes = {
+        markdown = true,
+      },
     },
   },
 }
