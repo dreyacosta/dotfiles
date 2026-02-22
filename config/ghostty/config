@@ -3,7 +3,7 @@ font-family = "JetBrainsMono Nerd Font"
 font-style = Regular
 font-feature = -calt
 font-feature = -liga
-font-size = 10.6
+font-size = 9.6
 
 # Window
 window-theme = ghostty
@@ -11,7 +11,7 @@ confirm-close-surface=false
 resize-overlay = never
 gtk-toolbar-style = flat
 adjust-cell-width = -1
-adjust-cell-height = 7
+adjust-cell-height = 9
 macos-titlebar-style = hidden
 window-padding-balance = true
 window-save-state = always
@@ -23,6 +23,8 @@ cursor-style-blink = false
 shell-integration-features = no-cursor,ssh-env
 
 # Keyboard bindings
+keybind = ctrl+shift+page_up=unbind
+keybind = ctrl+shift+page_down=unbind
 keybind = shift+insert=paste_from_clipboard
 keybind = control+insert=copy_to_clipboard
 keybind = super+control+shift+alt+arrow_down=resize_split:down,100
