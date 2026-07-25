@@ -21,11 +21,11 @@ return {
     workspaces = {
       {
         name = "box",
-        path = "~/Projects/obsidian/box",
+        path = "~/projects/obsidian/box",
       },
       {
         name = "notes",
-        path = "~/Projects/obsidian/notes",
+        path = "~/projects/obsidian/notes",
       },
     },
 

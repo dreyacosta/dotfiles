@@ -1,5 +1,5 @@
 [settings]
-trusted_config_paths = ['~/Projects']
+trusted_config_paths = ['~/projects']
 
 [tools]
 go = "latest"

@@ -6,7 +6,7 @@ return {
       servers = {
         ruby_lsp = {
           mason = false,
-          cmd = { vim.fn.expand("~/Projects/dotfiles/shell/common/scripts/ruby-lsp-launcher.sh") },
+          cmd = { vim.fn.expand("~/projects/dotfiles/shell/common/scripts/ruby-lsp-launcher.sh") },
           init_options = {
             formatter = "rubocop",
           },
@@ -18,6 +18,20 @@ return {
           settings = {
             -- helps eslint find the eslintrc when it's placed in a subfolder instead of the cwd root
             workingDirectory = { mode = "auto" },
+          },
+        },
+        vtsls = {
+          settings = {
+            javascript = {
+              format = {
+                insertSpaceAfterOpeningAndBeforeClosingEmptyBraces = false,
+              },
+            },
+            typescript = {
+              format = {
+                insertSpaceAfterOpeningAndBeforeClosingEmptyBraces = false,
+              },
+            },
           },
         },
         vim.lsp.enable("cspell_ls"),
