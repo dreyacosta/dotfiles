@@ -134,6 +134,10 @@ assert_contains "$REPO_DIR/config/nvim/lua/plugins/lsp.lua" '--config'
 assert_contains "$REPO_DIR/scripts/install/omarchy-deps.sh" 'omarchy pkg add keyd'
 assert_contains "$REPO_DIR/scripts/install/omarchy-deps.sh" 'systemctl enable --now keyd'
 assert_contains "$REPO_DIR/scripts/install/omarchy.sh" 'keyd reload'
+assert_contains "$REPO_DIR/shell/platform/omarchy/bashrc" '/usr/share/omarchy/default/bash/env-bootstrap'
+if rg -q '\.local/share/omarchy/default/bash/rc' "$REPO_DIR/shell/platform/omarchy/bashrc"; then
+  fail "legacy Omarchy bash rc path is still present"
+fi
 if rg -q 'git-lfs|omarchy install docker' "$REPO_DIR/scripts/install" "$REPO_DIR/config/git/common"; then
   fail "removed Git LFS or Omarchy Docker setup is still present"
 fi

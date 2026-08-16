@@ -14,6 +14,7 @@ fi
 check_common_commands
 check_command docker
 check_command keyd
+check_file "/usr/share/omarchy/default/bash/rc"
 check_common_links
 check_link "$HOME/.bashrc" "$VERIFY_REPO_DIR/shell/platform/omarchy/bashrc"
 check_link "$HOME/.ideavimrc" "$VERIFY_REPO_DIR/home/ideavimrc"
