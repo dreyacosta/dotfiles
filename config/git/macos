@@ -1,0 +1,4 @@
+[include]
+  path = common
+[credential]
+  helper = osxkeychain

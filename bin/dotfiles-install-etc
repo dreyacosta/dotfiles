@@ -1,29 +1,114 @@
 #!/bin/bash
 
-readonly CONFIG_DIR="/etc"
+set -euo pipefail
 
-config_dirs=("$@")
-failed_items=()
+readonly REPO_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")/.." && pwd)"
 
-if [[ ! -d "$CONFIG_DIR" ]]; then
-  dotfiles-log "Creating etc directory: $CONFIG_DIR"
-  mkdir -p "$CONFIG_DIR"
-fi
+dry_run=false
+links=()
+legacy_links=()
+section=""
 
-for config_name in "${config_dirs[@]}"; do
-  target_path="$CONFIG_DIR/$config_name"
-  backup_path="etc/$config_name"
+export DOTFILES_BACKUP_DIR="${DOTFILES_BACKUP_DIR:-$HOME/dotfiles-wayback/$(date +%Y%m%d-%H%M%S)-$$}"
 
-  dotfiles-create-backup "$target_path" "$backup_path" || dotfiles-log "No existing etc to backup for $config_name"
+for arg in "$@"; do
+  case "$arg" in
+  --dry-run) dry_run=true ;;
+  --legacy-links) section="legacy-links" ;;
+  --links) section="links" ;;
+  --*)
+    dotfiles-log "Unknown argument: $arg"
+    exit 1
+    ;;
+  *)
+    case "$section" in
+    legacy-links) legacy_links+=("$arg") ;;
+    links) links+=("$arg") ;;
+    *)
+      dotfiles-log "Unexpected argument: $arg"
+      exit 1
+      ;;
+    esac
+    ;;
+  esac
+done
 
-  if dotfiles-create-symlink "etc/$config_name" "$target_path"; then
-    dotfiles-log "✓ Successfully processed etc: $config_name"
-  else
-    dotfiles-log "✗ Failed to process etc: $config_name"
-    failed_items+=("etc/$config_name")
+for mapping in "${links[@]}"; do
+  source_path="${mapping%%|*}"
+  target_path="${mapping#*|}"
+  if [[ "$mapping" != *"|"* || ! -e "$REPO_DIR/$source_path" || "$target_path" != /etc/* ]]; then
+    dotfiles-log "Invalid /etc link mapping: $mapping"
+    exit 1
   fi
 done
 
-if [[ ${#failed_items[@]} -gt 0 ]]; then
-  exit 1
-fi
+for legacy_mapping in "${legacy_links[@]}"; do
+  if [[ "$legacy_mapping" != *"|"* ]]; then
+    dotfiles-log "Invalid legacy /etc link mapping: $legacy_mapping"
+    exit 1
+  fi
+
+  legacy_path="${legacy_mapping%%|*}"
+  legacy_source="$REPO_DIR/${legacy_mapping#*|}"
+  if [[ ! -L "$legacy_path" ]]; then
+    continue
+  fi
+
+  current_source="$(readlink "$legacy_path")"
+  if [[ "$current_source" != "$legacy_source" ]]; then
+    dotfiles-log "Refusing to replace unmanaged symlink: $legacy_path -> $current_source"
+    exit 1
+  fi
+
+  backup_path="$DOTFILES_BACKUP_DIR/${legacy_path#/}"
+  if [[ -e "$backup_path" || -L "$backup_path" ]]; then
+    dotfiles-log "Backup destination already exists: $backup_path"
+    exit 1
+  fi
+done
+
+for legacy_mapping in "${legacy_links[@]}"; do
+  legacy_path="${legacy_mapping%%|*}"
+  [[ -L "$legacy_path" ]] || continue
+  backup_path="$DOTFILES_BACKUP_DIR/${legacy_path#/}"
+  if [[ "$dry_run" == true ]]; then
+    dotfiles-log "Would back up legacy symlink with sudo: $legacy_path"
+    continue
+  fi
+
+  dotfiles-log "Backing up legacy symlink with sudo: $legacy_path -> $backup_path"
+  mkdir -p "$(dirname "$backup_path")"
+  sudo mv "$legacy_path" "$backup_path"
+  install_owner="${SUDO_USER:-${USER:-$(id -un)}}"
+  sudo chown -R "$install_owner:$install_owner" "$backup_path" 2>/dev/null || true
+done
+
+for mapping in "${links[@]}"; do
+  source_path="${mapping%%|*}"
+  target_path="${mapping#*|}"
+  expected_source="$REPO_DIR/$source_path"
+
+  if [[ -L "$target_path" && "$(readlink "$target_path")" == "$expected_source" ]]; then
+    dotfiles-log "Already installed: $target_path"
+    continue
+  fi
+
+  if [[ "$dry_run" == true ]]; then
+    [[ -e "$target_path" || -L "$target_path" ]] && dotfiles-log "Would back up: $target_path"
+    dotfiles-log "Would link with sudo: $target_path -> $expected_source"
+    continue
+  fi
+
+  if [[ -e "$target_path" || -L "$target_path" ]]; then
+    backup_path="$DOTFILES_BACKUP_DIR/${target_path#/}"
+    dotfiles-log "Backing up with sudo: $target_path -> $backup_path"
+    mkdir -p "$(dirname "$backup_path")"
+    sudo mv "$target_path" "$backup_path"
+    install_owner="${SUDO_USER:-${USER:-$(id -un)}}"
+    sudo chown -R "$install_owner:$install_owner" "$backup_path" 2>/dev/null || true
+  fi
+
+  sudo mkdir -p "$(dirname "$target_path")"
+  sudo ln -s "$expected_source" "$target_path"
+  dotfiles-log "Linked: $target_path -> $expected_source"
+done

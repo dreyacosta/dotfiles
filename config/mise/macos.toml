@@ -3,5 +3,4 @@ trusted_config_paths = ['~/projects']
 
 [tools]
 go = "latest"
-node = "latest"
 python = "latest"

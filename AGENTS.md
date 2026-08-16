@@ -9,32 +9,33 @@ installers unless explicitly requested.
 There is no build system or test suite in this repo. The scripts below are the
 primary entry points.
 
-- macOS install: `./install-macos.sh`
-- Omarchy install: `./install-omarchy.sh`
-- Ubuntu VPS install: `./install-ubuntu-vps.sh`
-- Ubuntu VPS dependencies: `./install-ubuntu-vps-deps.sh`
+- macOS install: `./scripts/install/macos.sh`
+- macOS dependencies: `./scripts/install/macos-deps.sh`
+- Omarchy install: `./scripts/install/omarchy.sh`
+- Omarchy dependencies: `./scripts/install/omarchy-deps.sh`
+- Ubuntu VPS install: `./scripts/install/ubuntu-vps.sh`
+- Ubuntu VPS dependencies: `./scripts/install/ubuntu-vps-deps.sh`
 - Core installer (usually invoked by the scripts above): `bin/dotfiles-install`
-- Config install helper: `bin/dotfiles-install-config`
-- Dotfile install helper: `bin/dotfiles-install-files`
-- /etc install helper: `bin/dotfiles-install-etc`
+- /etc installer: `bin/dotfiles-install-etc`
 
 ### Single test
 
-No tests are defined. If you add a test framework, document the single-test
-command here.
+- Installer smoke test: `./tests/install-smoke.sh`
 
 ### Formatting / linting
 
 - Lua formatting uses StyLua. Config: `config/nvim/stylua.toml`
   - Example: `stylua --config-path config/nvim/stylua.toml config/nvim`
-- Spelling config: `cspell.json` (no script defined)
+- Spelling config: `home/cspell.json` (installed as `~/.cspell.json`; no script defined)
 
 ## Repo layout
 
 - `bin/` contains installation utilities and logging helpers.
 - `config/` contains user config directories (e.g. `nvim`, `hypr`, `karabiner`).
+- `home/` contains files installed directly under the user's home directory.
+- `scripts/install/` contains platform install entry points.
 - `etc/` contains system-level configs (e.g. `etc/keyd`).
-- `macos/` and `omarchy/` contain platform-specific shell rc files.
+- `shell/platform/` contains platform-specific shell startup files.
 
 ## Code style guidelines
 

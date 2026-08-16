@@ -1,0 +1,9 @@
+source ~/.local/share/omarchy/default/bash/rc
+source ~/.dotfiles/shell/common/history-refresh
+source ~/.dotfiles/shell/common/envs
+source ~/.dotfiles/shell/common/aliases
+source ~/.dotfiles/shell/common/functions
+source ~/.dotfiles/shell/bash/brew
+source ~/.dotfiles/shell/bash/init
+source ~/.dotfiles/shell/bash/zoxide
+source ~/.dotfiles/shell/common/tmux

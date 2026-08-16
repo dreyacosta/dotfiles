@@ -1,41 +1,21 @@
 #!/bin/bash
 
-# Get the original user's home directory when running with sudo
-if [[ -n "${SUDO_USER:-}" ]]; then
-  original_home=$(eval echo "~$SUDO_USER")
-else
-  original_home="$HOME"
-fi
-
-readonly BACKUP_DIR="$original_home/dotfiles-wayback"
-readonly TIMESTAMP_DIR="$BACKUP_DIR/$(date +%s)"
+set -u
 
 target_path="$1"
 backup_path="$2"
+backup_dir="${DOTFILES_BACKUP_DIR:?DOTFILES_BACKUP_DIR must be set}"
 
-if [[ ! -e "$target_path" ]]; then
+if [[ ! -e "$target_path" && ! -L "$target_path" ]]; then
+  exit 0
+fi
+
+destination="$backup_dir/$backup_path"
+if [[ -e "$destination" || -L "$destination" ]]; then
+  dotfiles-log "Backup destination already exists: $destination"
   exit 1
 fi
 
-if [[ ! -d "$TIMESTAMP_DIR" ]]; then
-  dotfiles-log "Creating timestamped backup directory: $TIMESTAMP_DIR"
-  mkdir -p "$TIMESTAMP_DIR"
-fi
-
-file_type="file"
-[[ -L "$target_path" ]] && file_type="symlink"
-[[ -d "$target_path" ]] && file_type="directory"
-
-dotfiles-log "Backing up existing $file_type: $target_path"
-mkdir -p "$(dirname "$TIMESTAMP_DIR/$backup_path")"
-
-# Use sudo for mv if we need elevated permissions
-if [[ -w "$(dirname "$target_path")" ]]; then
-  mv "$target_path" "$TIMESTAMP_DIR/$backup_path"
-else
-  sudo mv "$target_path" "$TIMESTAMP_DIR/$backup_path"
-  # Fix ownership back to original user
-  sudo chown -R "${SUDO_USER:-$USER}:${SUDO_USER:-$USER}" "$TIMESTAMP_DIR/$backup_path" 2>/dev/null || true
-fi
-
-dotfiles-log "Backup created: $TIMESTAMP_DIR/$backup_path"
+dotfiles-log "Backing up: $target_path -> $destination"
+mkdir -p "$(dirname "$destination")"
+mv "$target_path" "$destination"

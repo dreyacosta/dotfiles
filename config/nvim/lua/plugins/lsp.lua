@@ -6,7 +6,7 @@ return {
       servers = {
         ruby_lsp = {
           mason = false,
-          cmd = { vim.fn.expand("~/projects/dotfiles/shell/common/scripts/ruby-lsp-launcher.sh") },
+          cmd = { vim.fn.expand("~/.dotfiles/shell/common/scripts/ruby-lsp-launcher.sh") },
           init_options = {
             formatter = "rubocop",
           },
@@ -36,7 +36,7 @@ return {
         },
         vim.lsp.enable("cspell_ls"),
         vim.lsp.config("cspell_ls", {
-          cmd = { "cspell-lsp", "--stdio" },
+          cmd = { "cspell-lsp", "--stdio", "--config", vim.fn.expand("~/.cspell.json") },
           filetypes = {
             "lua",
             "python",
