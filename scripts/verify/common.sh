@@ -79,7 +79,7 @@ check_mise_tool() {
   local -r config_file="$1"
   local -r tool="$2"
 
-  if MISE_CONFIG_FILE="$config_file" mise exec -- command -v "$tool" >/dev/null 2>&1; then
+  if MISE_CONFIG_FILE="$config_file" mise exec -- bash -c 'command -v "$1"' _ "$tool" >/dev/null 2>&1; then
     pass "mise tool available: $tool"
   else
     fail "mise tool missing: $tool"
