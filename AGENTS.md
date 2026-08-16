@@ -15,6 +15,9 @@ primary entry points.
 - Omarchy dependencies: `./scripts/install/omarchy-deps.sh`
 - Ubuntu VPS install: `./scripts/install/ubuntu-vps.sh`
 - Ubuntu VPS dependencies: `./scripts/install/ubuntu-vps-deps.sh`
+- macOS verification: `./scripts/verify/macos.sh`
+- Omarchy verification: `./scripts/verify/omarchy.sh`
+- Ubuntu VPS verification: `./scripts/verify/ubuntu-vps.sh`
 - Core installer (usually invoked by the scripts above): `bin/dotfiles-install`
 - /etc installer: `bin/dotfiles-install-etc`
 

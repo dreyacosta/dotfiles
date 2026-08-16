@@ -138,4 +138,10 @@ if rg -q 'git-lfs|omarchy install docker' "$REPO_DIR/scripts/install" "$REPO_DIR
   fail "removed Git LFS or Omarchy Docker setup is still present"
 fi
 
+for verify_script in macos omarchy ubuntu-vps; do
+  [[ -x "$REPO_DIR/scripts/verify/$verify_script.sh" ]] || fail "verification script is not executable: $verify_script"
+  bash -n "$REPO_DIR/scripts/verify/$verify_script.sh"
+done
+bash -n "$REPO_DIR/scripts/verify/common.sh"
+
 printf 'Install smoke test passed\n'

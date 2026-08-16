@@ -14,6 +14,14 @@ From the repository root, run the matching entry point:
 
 Pass `--dry-run` to preview backups and links without changing the system.
 
+After installation, run the matching read-only verification script:
+
+```bash
+./scripts/verify/macos.sh
+./scripts/verify/omarchy.sh
+./scripts/verify/ubuntu-vps.sh
+```
+
 Dependency installers are available at `scripts/install/macos-deps.sh`,
 `scripts/install/omarchy-deps.sh`, and `scripts/install/ubuntu-vps-deps.sh`.
 The macOS bootstrap installs nvm from its official upstream installer rather
