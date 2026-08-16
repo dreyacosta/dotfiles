@@ -134,6 +134,12 @@ assert_contains "$REPO_DIR/config/nvim/lua/plugins/lsp.lua" '--config'
 assert_contains "$REPO_DIR/scripts/install/omarchy-deps.sh" 'omarchy pkg add keyd'
 assert_contains "$REPO_DIR/scripts/install/omarchy-deps.sh" 'systemctl enable --now keyd'
 assert_contains "$REPO_DIR/scripts/install/omarchy.sh" 'keyd reload'
+assert_contains "$REPO_DIR/scripts/install/omarchy.sh" 'herdr server reload-config'
+assert_contains "$REPO_DIR/scripts/install/omarchy.sh" 'config/herdr/config.toml'
+assert_contains "$REPO_DIR/config/herdr/config.toml" 'prefix = "ctrl\+a"'
+assert_contains "$REPO_DIR/config/herdr/config.toml" 'resize_pane_left = "ctrl\+shift\+left"'
+assert_contains "$REPO_DIR/shell/common/tmux" 'HERDR_PANE_ID'
+assert_contains "$REPO_DIR/scripts/verify/common.sh" "mise exec -- bash -c"
 assert_contains "$REPO_DIR/shell/platform/omarchy/bashrc" '/usr/share/omarchy/default/bash/env-bootstrap'
 if rg -q '\.local/share/omarchy/default/bash/rc' "$REPO_DIR/shell/platform/omarchy/bashrc"; then
   fail "legacy Omarchy bash rc path is still present"

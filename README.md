@@ -43,5 +43,6 @@ For compatibility, both `~/.tmux.conf` and `~/.config/tmux` point into this
 repository.
 
 Complete configurations such as Neovim and tmux are linked as directories.
-Mixed or application-managed directories such as Hyprland, Ghostty, Mise, and
-Karabiner receive links only for the files maintained in this repository.
+Mixed or application-managed directories such as Herdr, Hyprland, Ghostty,
+Mise, and Karabiner receive links only for the files maintained in this
+repository.

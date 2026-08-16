@@ -12,6 +12,7 @@ platform_links=(
   "home/ideavimrc|$HOME/.ideavimrc"
   "shell/platform/omarchy/bashrc|$HOME/.bashrc"
   "config/mise/config.toml|$CONFIG_HOME/mise/config.toml"
+  "config/herdr/config.toml|$CONFIG_HOME/herdr/config.toml"
   "config/hypr/bindings.lua|$CONFIG_HOME/hypr/bindings.lua"
   "config/hypr/input.lua|$CONFIG_HOME/hypr/input.lua"
   "config/ghostty/config|$CONFIG_HOME/ghostty/config"
@@ -46,6 +47,11 @@ main() {
   if [[ "$dry_run" == false ]]; then
     sudo keyd reload
     dotfiles-log "Reloaded keyd configuration"
+
+    if herdr status server >/dev/null 2>&1; then
+      herdr server reload-config
+      dotfiles-log "Reloaded Herdr configuration"
+    fi
   fi
 }
 
