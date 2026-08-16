@@ -12,6 +12,7 @@ else
 fi
 
 check_common_commands
+check_command brew
 check_command docker
 check_command herdr
 check_command keyd

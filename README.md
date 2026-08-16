@@ -30,9 +30,10 @@ than Homebrew.
 The Omarchy dependency script targets the current Omarchy baseline and expects
 its standard Docker, Git, mise, tmux, Neovim, fzf, ripgrep, fd, Starship,
 zoxide, bat, eza, and gum commands to already be available. It installs and
-enables keyd for the system keyboard configuration. Mise installs the configured
-Go, Node, and Python runtimes on Linux; macOS uses mise for Go and Python while
-nvm remains the Node version manager.
+enables keyd for the system keyboard configuration and bootstraps Homebrew from
+its official installer. Mise installs the configured Go, Node, and Python
+runtimes on Linux; macOS uses mise for Go and Python while nvm remains the Node
+version manager.
 
 Each entry point resolves the repository location from its own path, so calling
 it through an absolute path does not depend on the current working directory.

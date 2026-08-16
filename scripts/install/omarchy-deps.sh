@@ -23,6 +23,23 @@ install_keyd() {
   sudo systemctl enable --now keyd
 }
 
+install_homebrew() {
+  omarchy pkg add base-devel procps-ng curl file git
+
+  if ! command -v brew >/dev/null 2>&1 && [[ ! -x /home/linuxbrew/.linuxbrew/bin/brew ]]; then
+    NONINTERACTIVE=1 /bin/bash -c "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/HEAD/install.sh)"
+  fi
+
+  if [[ -x /home/linuxbrew/.linuxbrew/bin/brew ]]; then
+    eval "$(/home/linuxbrew/.linuxbrew/bin/brew shellenv bash)"
+  elif command -v brew >/dev/null 2>&1; then
+    eval "$(brew shellenv bash)"
+  else
+    dotfiles-log "Homebrew installation was not found"
+    exit 1
+  fi
+}
+
 install_mise_tools() {
   MISE_CONFIG_FILE="$REPO_DIR/config/mise/config.toml" mise install
   MISE_CONFIG_FILE="$REPO_DIR/config/mise/config.toml" mise exec -- \
@@ -47,6 +64,7 @@ install_tmux_sessionizer() {
 main() {
   require_omarchy_baseline
   install_keyd
+  install_homebrew
   install_mise_tools
   install_tmux_sessionizer
 }
