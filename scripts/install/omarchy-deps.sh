@@ -18,6 +18,11 @@ require_omarchy_baseline() {
   done
 }
 
+install_keyd() {
+  omarchy pkg add keyd
+  sudo systemctl enable --now keyd
+}
+
 install_mise_tools() {
   MISE_CONFIG_FILE="$REPO_DIR/config/mise/config.toml" mise install
   MISE_CONFIG_FILE="$REPO_DIR/config/mise/config.toml" mise exec -- \
@@ -41,6 +46,7 @@ install_tmux_sessionizer() {
 
 main() {
   require_omarchy_baseline
+  install_keyd
   install_mise_tools
   install_tmux_sessionizer
 }

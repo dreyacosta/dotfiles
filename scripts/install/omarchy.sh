@@ -34,7 +34,19 @@ etc_legacy_links=(
 )
 
 main() {
+  local dry_run=false
+  local arg
+
+  for arg in "$@"; do
+    [[ "$arg" == "--dry-run" ]] && dry_run=true
+  done
+
   install_dotfiles "omarchy" "$@"
+
+  if [[ "$dry_run" == false ]]; then
+    sudo keyd reload
+    dotfiles-log "Reloaded keyd configuration"
+  fi
 }
 
 if [[ "${BASH_SOURCE[0]}" == "${0}" ]]; then

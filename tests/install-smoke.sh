@@ -131,6 +131,9 @@ assert_contains "$REPO_DIR/config/mise/config.toml" 'python = "latest"'
 assert_contains "$REPO_DIR/config/mise/macos.toml" 'go = "latest"'
 assert_contains "$REPO_DIR/config/mise/macos.toml" 'python = "latest"'
 assert_contains "$REPO_DIR/config/nvim/lua/plugins/lsp.lua" '--config'
+assert_contains "$REPO_DIR/scripts/install/omarchy-deps.sh" 'omarchy pkg add keyd'
+assert_contains "$REPO_DIR/scripts/install/omarchy-deps.sh" 'systemctl enable --now keyd'
+assert_contains "$REPO_DIR/scripts/install/omarchy.sh" 'keyd reload'
 if rg -q 'git-lfs|omarchy install docker' "$REPO_DIR/scripts/install" "$REPO_DIR/config/git/common"; then
   fail "removed Git LFS or Omarchy Docker setup is still present"
 fi
