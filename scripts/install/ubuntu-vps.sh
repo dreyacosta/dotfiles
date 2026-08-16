@@ -14,12 +14,7 @@ platform_links=(
   "config/git/linux|$CONFIG_HOME/git/config"
 )
 
-platform_legacy_links=(
-  "$CONFIG_HOME/mise|config/mise"
-)
-
 etc_links=()
-etc_legacy_links=()
 
 main() {
   install_dotfiles "ubuntu-vps" "$@"

@@ -5,7 +5,7 @@ set -u
 readonly REPO_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")/.." && pwd)"
 
 usage() {
-  dotfiles-log "Usage: dotfiles-install <platform> [--dry-run] --legacy <paths...> --legacy-links <paths...> --links <source|target...>"
+  dotfiles-log "Usage: dotfiles-install <platform> [--dry-run] --links <source|target...>"
 }
 
 backup_name_for() {
@@ -29,8 +29,6 @@ main() {
 
   local dry_run=false
   local section=""
-  local -a legacy_paths=()
-  local -a legacy_links=()
   local -a links=()
   local arg
 
@@ -38,12 +36,6 @@ main() {
     case "$arg" in
     --dry-run)
       dry_run=true
-      ;;
-    --legacy)
-      section="legacy"
-      ;;
-    --legacy-links)
-      section="legacy-links"
       ;;
     --links)
       section="links"
@@ -54,8 +46,6 @@ main() {
       ;;
     *)
       case "$section" in
-      legacy) legacy_paths+=("$arg") ;;
-      legacy-links) legacy_links+=("$arg") ;;
       links) links+=("$arg") ;;
       *)
         usage
@@ -88,82 +78,7 @@ main() {
   [[ "$dry_run" == true ]] && dotfiles-log "Dry run: no changes will be made"
 
   local has_errors=false
-  local legacy_mapping legacy_path legacy_source backup_name expected_source current_source
-
-  # Validate the full migration before moving any existing configuration.
-  for legacy_mapping in "${legacy_links[@]}"; do
-    if [[ "$legacy_mapping" != *"|"* ]]; then
-      dotfiles-log "Invalid legacy link mapping: $legacy_mapping"
-      has_errors=true
-      continue
-    fi
-
-    legacy_path="${legacy_mapping%%|*}"
-    legacy_source="$REPO_DIR/${legacy_mapping#*|}"
-    if [[ ! -L "$legacy_path" ]]; then
-      continue
-    fi
-
-    current_source="$(readlink "$legacy_path")"
-    if [[ "$current_source" != "$legacy_source" ]]; then
-      dotfiles-log "Refusing to replace unmanaged symlink: $legacy_path -> $current_source"
-      has_errors=true
-      continue
-    fi
-
-    backup_name="$(backup_name_for "$legacy_path")"
-    if [[ -e "$DOTFILES_BACKUP_DIR/$backup_name" || -L "$DOTFILES_BACKUP_DIR/$backup_name" ]]; then
-      dotfiles-log "Backup destination already exists: $DOTFILES_BACKUP_DIR/$backup_name"
-      has_errors=true
-    fi
-  done
-
-  for legacy_path in "${legacy_paths[@]}"; do
-    if [[ ! -e "$legacy_path" && ! -L "$legacy_path" ]]; then
-      continue
-    fi
-
-    backup_name="$(backup_name_for "$legacy_path")"
-    if [[ -e "$DOTFILES_BACKUP_DIR/$backup_name" || -L "$DOTFILES_BACKUP_DIR/$backup_name" ]]; then
-      dotfiles-log "Backup destination already exists: $DOTFILES_BACKUP_DIR/$backup_name"
-      has_errors=true
-    fi
-  done
-
-  if [[ "$has_errors" == true ]]; then
-    dotfiles-log "Legacy migration failed; no links were changed"
-    return 1
-  fi
-
-  for legacy_mapping in "${legacy_links[@]}"; do
-    legacy_path="${legacy_mapping%%|*}"
-    [[ -L "$legacy_path" ]] || continue
-    backup_name="$(backup_name_for "$legacy_path")"
-    if [[ "$dry_run" == true ]]; then
-      dotfiles-log "Would back up legacy symlink: $legacy_path"
-    elif ! dotfiles-create-backup "$legacy_path" "$backup_name"; then
-      has_errors=true
-      break
-    fi
-  done
-
-  for legacy_path in "${legacy_paths[@]}"; do
-    if [[ ! -e "$legacy_path" && ! -L "$legacy_path" ]]; then
-      continue
-    fi
-    backup_name="$(backup_name_for "$legacy_path")"
-    if [[ "$dry_run" == true ]]; then
-      dotfiles-log "Would back up legacy target: $legacy_path"
-    elif ! dotfiles-create-backup "$legacy_path" "$backup_name"; then
-      has_errors=true
-      break
-    fi
-  done
-
-  if [[ "$has_errors" == true ]]; then
-    dotfiles-log "Legacy migration failed; no links were changed"
-    return 1
-  fi
+  local backup_name expected_source current_source
 
   for mapping in "${links[@]}"; do
     source_path="${mapping%%|*}"

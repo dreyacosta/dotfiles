@@ -20,18 +20,8 @@ platform_links=(
   "config/git/linux|$CONFIG_HOME/git/config"
 )
 
-platform_legacy_links=(
-  "$CONFIG_HOME/mise|config/mise"
-  "$CONFIG_HOME/hypr|config/hypr"
-  "$CONFIG_HOME/ghostty|config/ghostty"
-)
-
 etc_links=(
   "etc/keyd/default.conf|/etc/keyd/default.conf"
-)
-
-etc_legacy_links=(
-  "/etc/keyd|etc/keyd"
 )
 
 main() {

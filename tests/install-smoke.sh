@@ -30,8 +30,8 @@ assert_contains() {
   rg -q -- "$pattern" "$path" || fail "$path does not contain: $pattern"
 }
 
-printf 'legacy git config\n' >"$HOME/.gitconfig"
-ln -s "$REPO_DIR/config/git" "$XDG_CONFIG_HOME/git"
+mkdir -p "$XDG_CONFIG_HOME/git"
+printf 'existing git config\n' >"$XDG_CONFIG_HOME/git/config"
 
 links=(
   ".|$HOME/.dotfiles"
@@ -40,20 +40,16 @@ links=(
   "config/git/macos|$XDG_CONFIG_HOME/git/config"
 )
 
-dotfiles-install test --legacy "$HOME/.gitconfig" --legacy-links "$XDG_CONFIG_HOME/git|config/git" \
-  --links "${links[@]}"
+dotfiles-install test --links "${links[@]}"
 
 assert_link "$HOME/.dotfiles" "$REPO_DIR/."
 assert_link "$XDG_CONFIG_HOME/git/common" "$REPO_DIR/config/git/common"
 assert_link "$XDG_CONFIG_HOME/git/ignore" "$REPO_DIR/config/git/ignore"
 assert_link "$XDG_CONFIG_HOME/git/config" "$REPO_DIR/config/git/macos"
 [[ "$(git config --global --get credential.helper)" == "osxkeychain" ]] || fail "platform Git config was not included"
-[[ -f "$DOTFILES_BACKUP_DIR/.gitconfig" ]] || fail "legacy Git config was not backed up"
-[[ -L "$DOTFILES_BACKUP_DIR/.config/git" ]] || fail "legacy Git directory link was not backed up"
-[[ -f "$REPO_DIR/config/git/common" ]] || fail "repository config was changed during migration"
+[[ -f "$DOTFILES_BACKUP_DIR/.config/git/config" ]] || fail "existing Git config was not backed up"
 
-dotfiles-install test --legacy "$HOME/.gitconfig" --legacy-links "$XDG_CONFIG_HOME/git|config/git" \
-  --links "${links[@]}"
+dotfiles-install test --links "${links[@]}"
 
 dry_home="$TEST_DIR/dry-home"
 dotfiles-install test --dry-run --links "home/cspell.json|$dry_home/.cspell.json"
@@ -66,49 +62,6 @@ if dotfiles-install test --links \
   fail "missing source did not fail validation"
 fi
 [[ ! -e "$invalid_home/.cspell.json" ]] || fail "validation failure caused a partial install"
-
-unmanaged_home="$TEST_DIR/unmanaged-home"
-unmanaged_target="$TEST_DIR/unmanaged-target"
-mkdir -p "$unmanaged_home/.config" "$unmanaged_target"
-ln -s "$unmanaged_target" "$unmanaged_home/.config/git"
-if HOME="$unmanaged_home" dotfiles-install test \
-  --legacy-links "$unmanaged_home/.config/git|config/git" \
-  --links "config/git/common|$unmanaged_home/.config/git/common"; then
-  fail "unmanaged directory symlink was accepted"
-fi
-assert_link "$unmanaged_home/.config/git" "$unmanaged_target"
-[[ ! -e "$unmanaged_target/common" ]] || fail "unmanaged symlink target was modified"
-
-preflight_home="$TEST_DIR/preflight-home"
-preflight_target="$TEST_DIR/preflight-target"
-preflight_backup="$TEST_DIR/preflight-backup"
-mkdir -p "$preflight_home/.config" "$preflight_target"
-ln -s "$REPO_DIR/config/git" "$preflight_home/.config/git"
-ln -s "$preflight_target" "$preflight_home/.config/hypr"
-printf 'legacy git config\n' >"$preflight_home/.gitconfig"
-if HOME="$preflight_home" DOTFILES_BACKUP_DIR="$preflight_backup" dotfiles-install test \
-  --legacy "$preflight_home/.gitconfig" \
-  --legacy-links \
-  "$preflight_home/.config/git|config/git" \
-  "$preflight_home/.config/hypr|config/hypr" \
-  --links "config/git/common|$preflight_home/.config/git/common"; then
-  fail "multi-link migration conflict was accepted"
-fi
-assert_link "$preflight_home/.config/git" "$REPO_DIR/config/git"
-assert_link "$preflight_home/.config/hypr" "$preflight_target"
-[[ -f "$preflight_home/.gitconfig" ]] || fail "preflight moved a legacy file before failing"
-[[ ! -e "$preflight_backup" ]] || fail "preflight created backups before failing"
-
-collision_home="$TEST_DIR/collision-home"
-collision_backup="$TEST_DIR/collision-backup"
-mkdir -p "$collision_home/.config" "$collision_backup/.config/git"
-ln -s "$REPO_DIR/config/git" "$collision_home/.config/git"
-if HOME="$collision_home" DOTFILES_BACKUP_DIR="$collision_backup" dotfiles-install test \
-  --legacy-links "$collision_home/.config/git|config/git" \
-  --links "config/git/common|$collision_home/.config/git/common"; then
-  fail "legacy backup collision was accepted"
-fi
-assert_link "$collision_home/.config/git" "$REPO_DIR/config/git"
 
 nvm_home="$TEST_DIR/nvm home"
 nvm_xdg="$nvm_home/custom config"

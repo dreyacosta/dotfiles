@@ -18,14 +18,7 @@ platform_links=(
   "config/git/macos|$CONFIG_HOME/git/config"
 )
 
-platform_legacy_links=(
-  "$CONFIG_HOME/karabiner|config/karabiner"
-  "$CONFIG_HOME/mise|config/mise"
-  "$HOME/Library/Application Support/com.mitchellh.ghostty|config/ghostty"
-)
-
 etc_links=()
-etc_legacy_links=()
 
 main() {
   install_dotfiles "macos" "$@"

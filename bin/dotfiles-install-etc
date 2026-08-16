@@ -6,7 +6,6 @@ readonly REPO_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")/.." && pwd)"
 
 dry_run=false
 links=()
-legacy_links=()
 section=""
 
 export DOTFILES_BACKUP_DIR="${DOTFILES_BACKUP_DIR:-$HOME/dotfiles-wayback/$(date +%Y%m%d-%H%M%S)-$$}"
@@ -14,7 +13,6 @@ export DOTFILES_BACKUP_DIR="${DOTFILES_BACKUP_DIR:-$HOME/dotfiles-wayback/$(date
 for arg in "$@"; do
   case "$arg" in
   --dry-run) dry_run=true ;;
-  --legacy-links) section="legacy-links" ;;
   --links) section="links" ;;
   --*)
     dotfiles-log "Unknown argument: $arg"
@@ -22,7 +20,6 @@ for arg in "$@"; do
     ;;
   *)
     case "$section" in
-    legacy-links) legacy_links+=("$arg") ;;
     links) links+=("$arg") ;;
     *)
       dotfiles-log "Unexpected argument: $arg"
@@ -40,47 +37,6 @@ for mapping in "${links[@]}"; do
     dotfiles-log "Invalid /etc link mapping: $mapping"
     exit 1
   fi
-done
-
-for legacy_mapping in "${legacy_links[@]}"; do
-  if [[ "$legacy_mapping" != *"|"* ]]; then
-    dotfiles-log "Invalid legacy /etc link mapping: $legacy_mapping"
-    exit 1
-  fi
-
-  legacy_path="${legacy_mapping%%|*}"
-  legacy_source="$REPO_DIR/${legacy_mapping#*|}"
-  if [[ ! -L "$legacy_path" ]]; then
-    continue
-  fi
-
-  current_source="$(readlink "$legacy_path")"
-  if [[ "$current_source" != "$legacy_source" ]]; then
-    dotfiles-log "Refusing to replace unmanaged symlink: $legacy_path -> $current_source"
-    exit 1
-  fi
-
-  backup_path="$DOTFILES_BACKUP_DIR/${legacy_path#/}"
-  if [[ -e "$backup_path" || -L "$backup_path" ]]; then
-    dotfiles-log "Backup destination already exists: $backup_path"
-    exit 1
-  fi
-done
-
-for legacy_mapping in "${legacy_links[@]}"; do
-  legacy_path="${legacy_mapping%%|*}"
-  [[ -L "$legacy_path" ]] || continue
-  backup_path="$DOTFILES_BACKUP_DIR/${legacy_path#/}"
-  if [[ "$dry_run" == true ]]; then
-    dotfiles-log "Would back up legacy symlink with sudo: $legacy_path"
-    continue
-  fi
-
-  dotfiles-log "Backing up legacy symlink with sudo: $legacy_path -> $backup_path"
-  mkdir -p "$(dirname "$backup_path")"
-  sudo mv "$legacy_path" "$backup_path"
-  install_owner="${SUDO_USER:-${USER:-$(id -un)}}"
-  sudo chown -R "$install_owner:$install_owner" "$backup_path" 2>/dev/null || true
 done
 
 for mapping in "${links[@]}"; do
