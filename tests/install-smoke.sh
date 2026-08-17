@@ -69,6 +69,34 @@ nvm_dir="$(HOME="$nvm_home" XDG_CONFIG_HOME="$nvm_xdg" bash -c \
   'source "$1"; printf "%s" "$NVM_DIR"' _ "$REPO_DIR/shell/platform/macos/nvm")"
 [[ "$nvm_dir" == "$nvm_xdg/nvm" ]] || fail "nvm did not append /nvm to XDG_CONFIG_HOME"
 
+if ! macos_deps_order="$(bash -c '
+  source "$1"
+  declare -F install_brew_casks >/dev/null
+  require_command_line_tools() { printf "%s\n" command-line-tools; }
+  install_homebrew() { printf "%s\n" homebrew; }
+  activate_homebrew() { printf "%s\n" activate-homebrew; }
+  install_brew_packages() { printf "%s\n" brew-packages; }
+  install_mise_tools() { printf "%s\n" mise; }
+  install_nvm() { printf "%s\n" nvm; }
+  install_tmux_sessionizer() { printf "%s\n" tmux-sessionizer; }
+  install_brew_casks() { printf "%s\n" brew-casks; }
+  main
+' _ "$REPO_DIR/scripts/install/macos-deps.sh")"; then
+  fail "macOS dependency installer does not have a separate cask phase"
+fi
+expected_macos_deps_order="$(printf '%s\n' \
+  command-line-tools homebrew activate-homebrew brew-packages mise nvm tmux-sessionizer brew-casks)"
+[[ "$macos_deps_order" == "$expected_macos_deps_order" ]] || fail "macOS dependencies are installed in the wrong order"
+
+homebrew_installer_mode="$(bash -c '
+  source "$1"
+  curl() { printf '\''printf "%%s" "${NONINTERACTIVE-unset}"'\''; }
+  export NONINTERACTIVE=parent
+  PATH=/usr/bin:/bin
+  install_homebrew
+' _ "$REPO_DIR/scripts/install/macos-deps.sh")"
+[[ "$homebrew_installer_mode" == "unset" ]] || fail "Homebrew bootstrap cannot prompt during a clean install"
+
 platform_home="$TEST_DIR/platform home"
 platform_xdg="$platform_home/custom config"
 mkdir -p "$platform_home" "$platform_xdg"

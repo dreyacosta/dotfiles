@@ -19,7 +19,8 @@ install_homebrew() {
     return
   fi
 
-  NONINTERACTIVE=1 /bin/bash -c "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/HEAD/install.sh)"
+  /usr/bin/env -u NONINTERACTIVE /bin/bash -c \
+    "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/HEAD/install.sh)"
 }
 
 activate_homebrew() {
@@ -50,6 +51,11 @@ install_brew_packages() {
     zoxide
     zsh-autosuggestions
   )
+
+  brew install "${packages[@]}"
+}
+
+install_brew_casks() {
   local -r casks=(
     font-jetbrains-mono-nerd-font
     docker
@@ -57,7 +63,6 @@ install_brew_packages() {
     karabiner-elements
   )
 
-  brew install "${packages[@]}"
   brew install --cask "${casks[@]}"
 }
 
@@ -104,6 +109,7 @@ main() {
   install_mise_tools
   install_nvm
   install_tmux_sessionizer
+  install_brew_casks
 }
 
 if [[ "${BASH_SOURCE[0]}" == "${0}" ]]; then

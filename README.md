@@ -4,6 +4,16 @@ Personal configuration for macOS, Omarchy, and Ubuntu VPS environments.
 
 ## Install
 
+For a complete macOS setup, install dependencies before linking the dotfiles:
+
+```bash
+./scripts/install/macos-deps.sh
+./scripts/install/macos.sh
+```
+
+The dependency installer bootstraps Homebrew when needed and supports its
+standard Intel (`/usr/local`) and Apple Silicon (`/opt/homebrew`) prefixes.
+
 From the repository root, run the matching entry point:
 
 ```bash
