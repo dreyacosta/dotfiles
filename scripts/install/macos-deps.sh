@@ -4,7 +4,7 @@ set -euo pipefail
 
 readonly REPO_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")/../.." && pwd)"
 readonly BIN_DIR="$REPO_DIR/bin"
-readonly NVM_VERSION="v0.40.6"
+readonly NVM_INSTALLER_VERSION="v0.40.6"
 export PATH="$BIN_DIR:$HOME/.local/bin:$PATH"
 
 require_command_line_tools() {
@@ -74,7 +74,8 @@ install_nvm() {
   fi
 
   if [[ ! -s "$NVM_DIR/nvm.sh" ]]; then
-    PROFILE=/dev/null /bin/bash -c "$(curl -fsSL "https://raw.githubusercontent.com/nvm-sh/nvm/$NVM_VERSION/install.sh")"
+    PROFILE=/dev/null /bin/bash -c \
+      "$(curl -fsSL "https://raw.githubusercontent.com/nvm-sh/nvm/$NVM_INSTALLER_VERSION/install.sh")"
   fi
 
   source "$NVM_DIR/nvm.sh"

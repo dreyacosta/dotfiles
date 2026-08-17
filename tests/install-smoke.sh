@@ -97,6 +97,17 @@ homebrew_installer_mode="$(bash -c '
 ' _ "$REPO_DIR/scripts/install/macos-deps.sh")"
 [[ "$homebrew_installer_mode" == "unset" ]] || fail "Homebrew bootstrap cannot prompt during a clean install"
 
+if ! bash -c '
+  source "$1"
+  nvm_version_scope() {
+    local NVM_VERSION="probe"
+    [[ "$NVM_VERSION" == "probe" ]]
+  }
+  nvm_version_scope
+' _ "$REPO_DIR/scripts/install/macos-deps.sh"; then
+  fail "macOS dependency installer reserves nvm internal variables"
+fi
+
 platform_home="$TEST_DIR/platform home"
 platform_xdg="$platform_home/custom config"
 mkdir -p "$platform_home" "$platform_xdg"
