@@ -16,13 +16,13 @@
 -- o.bind("SUPER + SHIFT + R", "SSH", "alacritty -e ssh your-server")
 
 -- Close the active window with CTRL+Q instead of SUPER+W.
-hl.unbind("SUPER + W")
-o.bind("CTRL + Q", "Close window", hl.dsp.window.close())
+-- hl.unbind("SUPER + W")
+-- o.bind("CTRL + Q", "Close window", hl.dsp.window.close())
 
 -- Change an existing binding by unbinding it first, then binding the key again.
 -- This example changes SUPER+SPACE from the launcher to the Omarchy root menu.
-hl.unbind("SUPER + SPACE")
-o.bind("CTRL + SPACE", "Omarchy menu", "omarchy-menu toggle root")
+-- hl.unbind("SUPER + SPACE")
+-- o.bind("CTRL + SPACE", "Omarchy menu", "omarchy-menu toggle root")
 
 -- Disable a default binding without replacing it.
 -- hl.unbind("SUPER + SHIFT + B")
@@ -33,13 +33,13 @@ o.bind("CTRL + SPACE", "Omarchy menu", "omarchy-menu toggle root")
 -- o.bind("SUPER + PERIOD", nil, "omarchy-shell shell toggle omarchy.emojis")
 
 -- Switch workspaces and move windows with CTRL instead of SUPER.
-for workspace = 1, 10 do
-  local key = "code:" .. tostring(workspace + 9)
-  hl.unbind("SUPER + " .. key)
-  hl.unbind("SUPER + SHIFT + " .. key)
-  o.bind("CTRL + " .. key, "Switch to workspace " .. workspace, hl.dsp.focus({ workspace = tostring(workspace) }))
-  o.bind("CTRL + SHIFT + " .. key, "Move window to workspace " .. workspace, hl.dsp.window.move({ workspace = tostring(workspace) }))
-end
+-- for workspace = 1, 10 do
+--   local key = "code:" .. tostring(workspace + 9)
+--   hl.unbind("SUPER + " .. key)
+--   hl.unbind("SUPER + SHIFT + " .. key)
+--   o.bind("CTRL + " .. key, "Switch to workspace " .. workspace, hl.dsp.focus({ workspace = tostring(workspace) }))
+--   o.bind("CTRL + SHIFT + " .. key, "Move window to workspace " .. workspace, hl.dsp.window.move({ workspace = tostring(workspace) }))
+-- end
 
 -- Focus windows with SUPER + H/J/K/L instead of the arrow keys.
 hl.unbind("SUPER + H")
