@@ -144,34 +144,6 @@
                     "type": "frontmost_application_if"
                   }
                 ],
-                "description": "Prevent remapping for Ctrl+Spacebar (Cmd+ Spacebar)",
-                "from": {
-                  "key_code": "spacebar",
-                  "modifiers": {
-                    "mandatory": [
-                      "left_control"
-                    ]
-                  }
-                },
-                "to": [
-                  {
-                    "key_code": "spacebar",
-                    "modifiers": [
-                      "left_command"
-                    ]
-                  }
-                ],
-                "type": "basic"
-              },
-              {
-                "conditions": [
-                  {
-                    "bundle_identifiers": [
-                      "com.mitchellh.ghostty"
-                    ],
-                    "type": "frontmost_application_if"
-                  }
-                ],
                 "description": "Prevent remapping for Ctrl+V (Cmd+V)",
                 "from": {
                   "key_code": "v",
