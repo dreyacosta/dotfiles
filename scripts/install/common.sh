@@ -6,6 +6,7 @@ common_links=(
   ".|$HOME/.dotfiles"
   "home/cspell.json|$HOME/.cspell.json"
   "home/cspell-custom-words.txt|$HOME/.cspell-custom-words.txt"
+  "home/markdownlint.jsonc|$HOME/.markdownlint.jsonc"
   "config/nvim|$CONFIG_HOME/nvim"
   "config/tmux-sessionizer/tmux-sessionizer.conf|$CONFIG_HOME/tmux-sessionizer/tmux-sessionizer.conf"
   "config/starship.toml|$CONFIG_HOME/starship.toml"

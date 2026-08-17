@@ -12,7 +12,7 @@ pass() {
 }
 
 fail() {
-  printf 'FAIL: %s\n' "$1" >&2
+  printf '\033[1mFAIL: %s\033[0m\n' "$1" >&2
   verify_failed=$((verify_failed + 1))
 }
 
@@ -99,6 +99,7 @@ check_common_links() {
   check_link "$HOME/.dotfiles" "$VERIFY_REPO_DIR/."
   check_link "$HOME/.cspell.json" "$VERIFY_REPO_DIR/home/cspell.json"
   check_link "$HOME/.cspell-custom-words.txt" "$VERIFY_REPO_DIR/home/cspell-custom-words.txt"
+  check_link "$HOME/.markdownlint.jsonc" "$VERIFY_REPO_DIR/home/markdownlint.jsonc"
   check_link "$HOME/.tmux.conf" "$VERIFY_REPO_DIR/config/tmux/tmux.conf"
   check_link "$VERIFY_CONFIG_HOME/git/common" "$VERIFY_REPO_DIR/config/git/common"
   check_link "$VERIFY_CONFIG_HOME/git/ignore" "$VERIFY_REPO_DIR/config/git/ignore"
