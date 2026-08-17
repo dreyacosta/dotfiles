@@ -128,6 +128,8 @@ assert_contains "$REPO_DIR/scripts/install/omarchy-deps.sh" 'systemctl enable --
 assert_contains "$REPO_DIR/scripts/install/omarchy-deps.sh" 'Homebrew/install/HEAD/install.sh'
 assert_contains "$REPO_DIR/scripts/install/omarchy-deps.sh" 'omarchy pkg add base-devel procps-ng curl file git'
 assert_contains "$REPO_DIR/scripts/install/omarchy.sh" 'keyd reload'
+assert_contains "$REPO_DIR/scripts/install/omarchy.sh" 'systemd-suspend.service.d/touchbar-backlight.conf'
+assert_contains "$REPO_DIR/scripts/install/omarchy.sh" 'etc/systemd/system-sleep/touchbar-backlight'
 assert_contains "$REPO_DIR/scripts/install/omarchy.sh" 'herdr server reload-config'
 assert_contains "$REPO_DIR/scripts/install/omarchy.sh" 'config/herdr/config.toml'
 assert_contains "$REPO_DIR/config/herdr/config.toml" 'prefix = "ctrl\+space"'
@@ -147,5 +149,6 @@ for verify_script in macos omarchy ubuntu-vps; do
   bash -n "$REPO_DIR/scripts/verify/$verify_script.sh"
 done
 bash -n "$REPO_DIR/scripts/verify/common.sh"
+bash -n "$REPO_DIR/etc/systemd/system-sleep/touchbar-backlight"
 
 printf 'Install smoke test passed\n'

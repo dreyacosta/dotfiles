@@ -1,0 +1,36 @@
+#!/bin/bash
+
+set -u
+
+readonly BACKLIGHT_DIR="/sys/class/backlight/appletb_backlight"
+readonly DRIVER_DIR="/sys/bus/hid/drivers/hid-appletb-bl"
+
+[[ "${1:-}" == "post" ]] || exit 0
+
+system_vendor=""
+product_name=""
+[[ -r /sys/class/dmi/id/sys_vendor ]] && read -r system_vendor </sys/class/dmi/id/sys_vendor
+[[ -r /sys/class/dmi/id/product_name ]] && read -r product_name </sys/class/dmi/id/product_name
+[[ "$system_vendor" == "Apple Inc." && "$product_name" == MacBookPro* ]] || exit 0
+
+for _ in {1..20}; do
+  if [[ -L "$BACKLIGHT_DIR/device" ]]; then
+    device_path="$(readlink -f "$BACKLIGHT_DIR/device")"
+    device_id="${device_path##*/}"
+
+    if [[ -e "$DRIVER_DIR/$device_id" ]]; then
+      if ! printf '%s' "$device_id" >"$DRIVER_DIR/unbind" ||
+        ! printf '%s' "$device_id" >"$DRIVER_DIR/bind" ||
+        ! printf '0' >"$BACKLIGHT_DIR/brightness"; then
+        logger -t touchbar-backlight "Failed to reset Touch Bar backlight after resume"
+      else
+        logger -t touchbar-backlight "Reset Touch Bar backlight after resume: $device_id"
+      fi
+      exit 0
+    fi
+  fi
+
+  sleep 0.1
+done
+
+logger -t touchbar-backlight "Touch Bar backlight device was not available after resume"

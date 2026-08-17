@@ -22,6 +22,8 @@ platform_links=(
 
 etc_links=(
   "etc/keyd/default.conf|/etc/keyd/default.conf"
+  "etc/systemd/system/systemd-suspend.service.d/touchbar-backlight.conf|/etc/systemd/system/systemd-suspend.service.d/touchbar-backlight.conf"
+  "etc/systemd/system-sleep/touchbar-backlight|/etc/systemd/system-sleep/touchbar-backlight"
 )
 
 main() {
