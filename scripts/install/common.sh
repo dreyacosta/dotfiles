@@ -19,13 +19,12 @@ common_links=(
 install_dotfiles() {
   local platform="$1"
   shift
-  local -a options=("$@")
 
   export DOTFILES_BACKUP_DIR="${DOTFILES_BACKUP_DIR:-$HOME/dotfiles-wayback/$(date +%Y%m%d-%H%M%S)-$$}"
 
-  dotfiles-install "$platform" "${options[@]}" --links "${common_links[@]}" "${platform_links[@]}"
+  dotfiles-install "$platform" "$@" --links "${common_links[@]}" "${platform_links[@]}"
 
   if [[ ${#etc_links[@]} -gt 0 ]]; then
-    dotfiles-install-etc "${options[@]}" --links "${etc_links[@]}"
+    dotfiles-install-etc "$@" --links "${etc_links[@]}"
   fi
 }
