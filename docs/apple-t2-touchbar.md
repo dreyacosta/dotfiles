@@ -14,8 +14,9 @@ The observed behavior has two parts:
 
 ## Installed files
 
-The installer copies these files to `/etc` as real files so they remain
-available independently of the repository and home filesystem:
+Only when the installer detects the supported Apple hardware, it copies these
+files to `/etc` as real files so they remain available independently of the
+repository and home filesystem:
 
 | Repository source | Installed destination | Purpose |
 | --- | --- | --- |
@@ -24,10 +25,12 @@ available independently of the repository and home filesystem:
 | `etc/systemd/system-sleep/touchbar-backlight` | `/etc/systemd/system-sleep/touchbar-backlight` | Applies the boot or post-resume backlight action. |
 | `etc/systemd/system/systemd-suspend.service.d/touchbar-backlight.conf` | `/etc/systemd/system/systemd-suspend.service.d/touchbar-backlight.conf` | Runs the post-resume action after systemd suspend. |
 
-The helper verifies that the system is an Apple MacBook Pro and that the Apple
-`05ac:8102` Touch Bar backlight device exists before changing hardware state.
-It exits without doing anything on non-Apple computers and Macs without this
-Touch Bar device.
+The installer verifies that the system is an Apple MacBook Pro and that the
+Apple `05ac:8102` Touch Bar backlight device exists before installing or
+enabling any part of the workaround. Non-Apple computers and Macs without this
+Touch Bar device receive no Touch Bar files or systemd service. The installed
+helper repeats the same checks before changing hardware state as a defensive
+safeguard.
 
 ## Installation
 

@@ -39,9 +39,11 @@ Existing targets that need replacement are backed up below
 
 ## Platform-specific follow-up
 
-On an Apple T2 MacBook Pro running Omarchy, the installer prints an additional
-instruction to rebuild the Unified Kernel Image and reboot. Follow the
-[Apple T2 Touch Bar guide](apple-t2-touchbar.md) for that workflow.
+On a supported Apple T2 MacBook Pro running Omarchy, the installer adds the
+Touch Bar configuration and prints an additional instruction to rebuild the
+Unified Kernel Image and reboot. It skips all Touch Bar files and service
+actions on other hardware. Follow the [Apple T2 Touch Bar guide](apple-t2-touchbar.md)
+for that workflow.
 
 Some dependency changes, such as group membership, may also require logging
 out and back in. Follow any messages printed by the selected installer.

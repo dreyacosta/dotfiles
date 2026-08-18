@@ -24,12 +24,7 @@ etc_links=(
   "etc/keyd/default.conf|/etc/keyd/default.conf"
 )
 
-etc_copies=(
-  "etc/modprobe.d/touchbar.conf|/etc/modprobe.d/touchbar.conf"
-  "etc/systemd/system/systemd-suspend.service.d/touchbar-backlight.conf|/etc/systemd/system/systemd-suspend.service.d/touchbar-backlight.conf"
-  "etc/systemd/system/touchbar-backlight.service|/etc/systemd/system/touchbar-backlight.service"
-  "etc/systemd/system-sleep/touchbar-backlight|/etc/systemd/system-sleep/touchbar-backlight"
-)
+etc_copies=()
 
 is_touchbar_mac() {
   local system_vendor=""
@@ -52,20 +47,30 @@ is_touchbar_mac() {
 
 main() {
   local dry_run=false
+  local touchbar_mac=false
   local arg
 
   for arg in "$@"; do
     [[ "$arg" == "--dry-run" ]] && dry_run=true
   done
 
+  if is_touchbar_mac; then
+    touchbar_mac=true
+    etc_copies+=(
+      "etc/modprobe.d/touchbar.conf|/etc/modprobe.d/touchbar.conf"
+      "etc/systemd/system/systemd-suspend.service.d/touchbar-backlight.conf|/etc/systemd/system/systemd-suspend.service.d/touchbar-backlight.conf"
+      "etc/systemd/system/touchbar-backlight.service|/etc/systemd/system/touchbar-backlight.service"
+      "etc/systemd/system-sleep/touchbar-backlight|/etc/systemd/system-sleep/touchbar-backlight"
+    )
+  fi
+
   install_dotfiles "omarchy" "$@"
 
   if [[ "$dry_run" == false ]]; then
-    sudo systemctl daemon-reload
-    sudo systemctl enable --now touchbar-backlight.service
-    dotfiles-log "Enabled Touch Bar backlight service"
-
-    if is_touchbar_mac; then
+    if [[ "$touchbar_mac" == true ]]; then
+      sudo systemctl daemon-reload
+      sudo systemctl enable --now touchbar-backlight.service
+      dotfiles-log "Enabled Touch Bar backlight service"
       dotfiles-log "Touch Bar configuration installed"
       dotfiles-log "Run: sudo limine-mkinitcpio"
       dotfiles-log "Then reboot to apply the Touch Bar module option during early boot"
