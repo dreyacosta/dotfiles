@@ -57,3 +57,10 @@ Complete configurations such as Neovim and tmux are linked as directories.
 Mixed or application-managed directories such as Herdr, Hyprland, Ghostty,
 Mise, and Karabiner receive links only for the files maintained in this
 repository.
+
+## Documentation
+
+- [Documentation index](docs/README.md)
+- [Repository structure and installer architecture](docs/architecture.md)
+- [Installation, updates, and verification](docs/installation.md)
+- [Apple T2 Touch Bar workaround](docs/apple-t2-touchbar.md)
