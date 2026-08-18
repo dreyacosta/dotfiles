@@ -137,7 +137,7 @@ assert_contains "$REPO_DIR/scripts/install/omarchy.sh" 'etc/systemd/system-sleep
 assert_contains "$REPO_DIR/scripts/install/omarchy.sh" 'Run: sudo limine-mkinitcpio'
 assert_contains "$REPO_DIR/scripts/install/omarchy.sh" 'herdr server reload-config'
 assert_contains "$REPO_DIR/scripts/install/omarchy.sh" 'config/herdr/config.toml'
-assert_contains "$REPO_DIR/config/herdr/config.toml" 'prefix = "ctrl\+space"'
+assert_contains "$REPO_DIR/config/herdr/config.toml" 'prefix = "ctrl\+a"'
 assert_contains "$REPO_DIR/config/herdr/config.toml" 'resize_pane_left = "ctrl\+shift\+left"'
 assert_contains "$REPO_DIR/shell/common/tmux" 'HERDR_PANE_ID'
 assert_contains "$REPO_DIR/scripts/verify/common.sh" "mise exec -- bash -c"
