@@ -20,7 +20,7 @@ hl.config({
     -- numlock_by_default = true,
 
     -- Increase sensitivity for mouse/trackpad (default: 0).
-    sensitivity = 1,
+    sensitivity = 0.4,
 
     -- Turn off mouse acceleration (default: adaptive).
     -- accel_profile = "flat",

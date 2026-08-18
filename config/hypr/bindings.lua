@@ -32,6 +32,10 @@
 -- o.bind("SUPER + H", nil, "voxtype record toggle")
 -- o.bind("SUPER + PERIOD", nil, "omarchy-shell shell toggle omarchy.emojis")
 
+-- Open the Omarchy menu with the physical Super key, which keyd maps to Control.
+o.bind("CTRL + SPACE", "Omarchy menu", "omarchy-menu toggle root")
+o.bind("CTRL + Q", "Close window", hl.dsp.window.close())
+
 -- Switch workspaces and move windows with CTRL instead of SUPER.
 -- for workspace = 1, 10 do
 --   local key = "code:" .. tostring(workspace + 9)
