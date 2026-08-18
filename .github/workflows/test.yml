@@ -1,0 +1,31 @@
+name: Test
+
+on:
+  push:
+  pull_request:
+
+permissions:
+  contents: read
+
+jobs:
+  test:
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+
+    steps:
+      - name: Check out repository
+        uses: actions/checkout@v7
+
+      - name: Check shell syntax
+        run: |
+          bash -n \
+            bin/dotfiles \
+            lib/dotfiles/*.sh \
+            platforms/*.sh \
+            dependencies/*.sh \
+            scripts/install/*.sh \
+            scripts/verify/*.sh \
+            tests/*.sh
+
+      - name: Run tests
+        run: bin/dotfiles test
