@@ -1,7 +1,8 @@
 source ~/.dotfiles/shell/common/envs
-source ~/.dotfiles/shell/common/history-refresh
+source ~/.dotfiles/shell/bash/history
 source ~/.dotfiles/shell/common/aliases
 source ~/.dotfiles/shell/common/functions
+source ~/.dotfiles/shell/common/docker
 source ~/.dotfiles/shell/bash/brew
 source ~/.dotfiles/shell/bash/mise
 source ~/.dotfiles/shell/bash/fzf

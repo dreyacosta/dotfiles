@@ -4,63 +4,34 @@ Personal configuration for macOS, Omarchy, and Ubuntu VPS environments.
 
 ## Install
 
-For a complete macOS setup, install dependencies before linking the dotfiles:
+Clone the repository, then run the commands for the target platform from the
+repository root:
 
 ```bash
-./scripts/install/macos-deps.sh
-./scripts/install/macos.sh
+git clone https://github.com/dreyacosta/dotfiles.git ~/projects/dotfiles
+cd ~/projects/dotfiles
+bin/dotfiles dependencies macos
+bin/dotfiles install macos --dry-run
+bin/dotfiles install macos
+bin/dotfiles verify macos
 ```
 
-The dependency installer bootstraps Homebrew when needed and supports its
-standard Intel (`/usr/local`) and Apple Silicon (`/opt/homebrew`) prefixes.
-
-From the repository root, run the matching entry point:
+Replace `macos` with `omarchy` or `ubuntu-vps` as needed. List the supported
+platforms with:
 
 ```bash
-./scripts/install/macos.sh
-./scripts/install/omarchy.sh
-./scripts/install/ubuntu-vps.sh
+bin/dotfiles platforms
 ```
 
-Pass `--dry-run` to preview backups and links without changing the system.
+The dependency command installs packages and may change system services. The
+install command manages configuration links and selected `/etc` files. Existing
+targets are moved below `~/dotfiles-wayback` before replacement.
 
-After installation, run the matching read-only verification script:
-
-```bash
-./scripts/verify/macos.sh
-./scripts/verify/omarchy.sh
-./scripts/verify/ubuntu-vps.sh
-```
-
-Dependency installers are available at `scripts/install/macos-deps.sh`,
-`scripts/install/omarchy-deps.sh`, and `scripts/install/ubuntu-vps-deps.sh`.
-The macOS bootstrap installs nvm from its official upstream installer rather
-than Homebrew.
-
-The Omarchy dependency script targets the current Omarchy baseline and expects
-its standard Docker, Git, mise, tmux, Neovim, fzf, ripgrep, fd, Starship,
-zoxide, bat, eza, and gum commands to already be available. It installs and
-enables keyd for the system keyboard configuration and bootstraps Homebrew from
-its official installer. Mise installs the configured Go, Node, and Python
-runtimes on Linux; macOS uses mise for Go and Python while nvm remains the Node
-version manager.
-
-Each entry point resolves the repository location from its own path, so calling
-it through an absolute path does not depend on the current working directory.
-
-Installers create symlinks from this repository and back up existing targets to
-`~/dotfiles-wayback`. Git and tmux use their XDG locations under `~/.config`.
-For compatibility, both `~/.tmux.conf` and `~/.config/tmux` point into this
-repository.
-
-Complete configurations such as Neovim and tmux are linked as directories.
-Mixed or application-managed directories such as Herdr, Hyprland, Ghostty,
-Mise, and Karabiner receive links only for the files maintained in this
-repository.
+The scripts under `scripts/install/` and `scripts/verify/` remain available as
+compatibility entry points.
 
 ## Documentation
 
-- [Documentation index](docs/README.md)
-- [Repository structure and installer architecture](docs/architecture.md)
-- [Installation, updates, and verification](docs/installation.md)
+- [Installation, updates, recovery, and troubleshooting](docs/installation.md)
+- [Maintainer guide and installer design](docs/maintenance.md)
 - [Apple T2 Touch Bar workaround](docs/apple-t2-touchbar.md)

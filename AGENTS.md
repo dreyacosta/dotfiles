@@ -1,117 +1,52 @@
 # AGENTS
 
-This repository is a dotfiles collection with install helpers and editor configs.
-Agents should be conservative about changes, prefer small edits, and avoid running
-installers unless explicitly requested.
+This repository installs personal configuration and system files. Keep changes
+small and preserve unrelated local work.
 
-## Commands (build/lint/test)
+## Safety
 
-There is no build system or test suite in this repo. The scripts below are the
-primary entry points.
+- Treat `bin/dotfiles dependencies` and non-dry-run installation as machine-changing operations. Run them only when the user explicitly requests it.
+- Use `bin/dotfiles install <platform> --dry-run` for read-only installation inspection.
+- Keep platform manifests side-effect free. Put package, service, and network changes in `dependencies/`; put unavoidable configuration reloads in `platform_post_install`.
+- Preserve existing configuration ownership: link whole directories only when the repository owns them completely.
 
-- macOS install: `./scripts/install/macos.sh`
-- macOS dependencies: `./scripts/install/macos-deps.sh`
-- Omarchy install: `./scripts/install/omarchy.sh`
-- Omarchy dependencies: `./scripts/install/omarchy-deps.sh`
-- Ubuntu VPS install: `./scripts/install/ubuntu-vps.sh`
-- Ubuntu VPS dependencies: `./scripts/install/ubuntu-vps-deps.sh`
-- macOS verification: `./scripts/verify/macos.sh`
-- Omarchy verification: `./scripts/verify/omarchy.sh`
-- Ubuntu VPS verification: `./scripts/verify/ubuntu-vps.sh`
-- Core installer (usually invoked by the scripts above): `bin/dotfiles-install`
-- /etc installer: `bin/dotfiles-install-etc`
+## Context
 
-### Single test
+- Installation, update, backup, or recovery work: read `docs/installation.md`.
+- Installer architecture, manifests, new platforms, or maintainer workflow: read `docs/maintenance.md`.
+- Omarchy changes involving Apple T2 hardware, Touch Bar modules, suspend, or early boot: read `docs/apple-t2-touchbar.md`.
 
-- Installer smoke test: `./tests/install-smoke.sh`
+## Conventions
 
-### Formatting / linting
+- Shell scripts use Bash, `set -euo pipefail`, quoted expansions, snake_case locals/functions, and arrays for lists.
+- User-facing installer output goes through `dotfiles_log`.
+- Platform state has one source of truth in `platforms/*.sh`; verification derives mapping checks from it.
+- Lua follows `config/nvim/stylua.toml`: two spaces and a 120-column width.
+- Preserve formatting and key ordering in JSON, TOML, and CONF files.
 
-- Lua formatting uses StyLua. Config: `config/nvim/stylua.toml`
-  - Example: `stylua --config-path config/nvim/stylua.toml config/nvim`
-- Spelling config: `home/cspell.json` (installed as `~/.cspell.json`; no script defined)
+## Completion checks
 
-## Repo layout
+| Changed area | Required checks |
+| --- | --- |
+| `bin/`, `lib/dotfiles/`, `platforms/`, `dependencies/`, install/verify wrappers | `bash -n` for changed scripts and `bin/dotfiles test` |
+| Shell startup files | `bash -n` for Bash files; parse Zsh files with Zsh when available |
+| `config/nvim/**/*.lua` | StyLua with `config/nvim/stylua.toml` |
+| Markdown or data files | `git diff --check`; configured formatter or spelling tool when available |
+| `/etc` or Apple T2 files | Smoke tests plus the manual verification documented for the matching platform |
 
-- `bin/` contains installation utilities and logging helpers.
-- `config/` contains user config directories (e.g. `nvim`, `hypr`, `karabiner`).
-- `home/` contains files installed directly under the user's home directory.
-- `scripts/install/` contains platform install entry points.
-- `etc/` contains system-level configs (e.g. `etc/keyd`).
-- `shell/platform/` contains platform-specific shell startup files.
+Finish with `git diff --check`. Report unavailable tools instead of silently
+skipping their checks.
 
-## Code style guidelines
+## Agent skills
 
-### General
+### Issue tracker
 
-- Keep edits minimal and consistent with existing patterns.
-- Prefer ASCII; only introduce Unicode if the file already uses it.
-- Avoid adding comments unless a non-obvious block needs clarification.
-- Preserve existing ordering in config files and lists unless adding adjacent items.
+Issues are tracked in this repository's GitHub Issues using the `gh` CLI. See `docs/agents/issue-tracker.md`.
 
-### Shell (bash)
+### Triage labels
 
-Files: `bin/*`, `install-*.sh`, `shell/common/scripts/*`
+Triage uses the five default canonical labels. See `docs/agents/triage-labels.md`.
 
-- Use `#!/bin/bash` (or `#!/usr/bin/env bash` when portability is required).
-- Use `set -euo pipefail` for scripts that execute multiple operations.
-- Quote variables and paths: `"$var"` and `"$path"`.
-- Use `readonly` for constants and `local` for function-scoped variables.
-- Prefer snake_case for function names and variables.
-- Use arrays for lists: `files=(...)` and iterate with `"${files[@]}"`.
-- Use `[[ ... ]]` for conditionals and `case` for argument parsing.
-- For best-effort actions, allow failure explicitly: `|| true`.
-- Use `dotfiles-log` for status messages; avoid raw `echo` in install flows.
-- When writing to privileged locations, follow the existing pattern of using
-  `sudo` only when required by permissions.
-- Error handling: collect failures in `failed_items`, exit nonzero when any
-  operation fails; do not partially silently fail.
+### Domain docs
 
-### Lua (Neovim config)
-
-Files: `config/nvim/**/*.lua`
-
-- Format with StyLua: 2 spaces, 120 column width (see `config/nvim/stylua.toml`).
-- Prefer `return { ... }` for plugin specs in `config/nvim/lua/plugins/*.lua`.
-- Keep plugin configuration scoped to the plugin entry; avoid global side effects.
-- Use `local` helper functions inside `opts` or `config` blocks when needed.
-- Naming: use lower_snake_case for helper functions, concise names for options.
-- Use `vim.g` for globals and `vim.opt` for options in `config/nvim/lua/config/*`.
-- Keep file responsibilities narrow (one plugin or one config topic per file).
-
-### JSON / TOML / CONF
-
-Files: `*.json`, `*.toml`, `*.conf`
-
-- Preserve formatting and key ordering as found in the file.
-- Avoid reformatting large blocks unless necessary for the change.
-- Keep paths and commands explicit; do not introduce implicit defaults.
-
-## Error handling expectations
-
-- Shell scripts should surface failures with nonzero exit codes.
-- Use logging for user-facing outcomes (`dotfiles-log`).
-- Avoid partial success without a clear log message.
-
-## Naming conventions
-
-- Shell: snake_case for functions and locals; UPPER_SNAKE_CASE for constants.
-- Lua: snake_case for helpers, minimal globals, descriptive option names.
-
-## Imports / dependencies
-
-- Shell: do not rely on nonstandard tools without documenting them in the script.
-- Lua: prefer built-in Neovim APIs and plugin opts; avoid extra requires unless
-  the plugin expects it.
-
-## Cursor / Copilot rules
-
-No `.cursorrules`, `.cursor/rules/`, or `.github/copilot-instructions.md` were
-found in this repo at the time of writing.
-
-## Notes for agentic changes
-
-- This repo is intended for personal configuration; be cautious with destructive
-  changes and avoid running install scripts without a direct request.
-- If you add new scripts or configs, update this file with the new commands or
-  conventions.
+Domain documentation uses the single-context layout. See `docs/agents/domain.md`.

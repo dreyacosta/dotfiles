@@ -1,10 +1,11 @@
 [[ -r /usr/share/omarchy/default/bash/env-bootstrap ]] && source /usr/share/omarchy/default/bash/env-bootstrap
 [[ $- != *i* ]] && return
 source "$OMARCHY_PATH/default/bash/rc"
-source ~/.dotfiles/shell/common/history-refresh
+source ~/.dotfiles/shell/bash/history
 source ~/.dotfiles/shell/common/envs
 source ~/.dotfiles/shell/common/aliases
 source ~/.dotfiles/shell/common/functions
+source ~/.dotfiles/shell/common/docker
 source ~/.dotfiles/shell/bash/brew
 source ~/.dotfiles/shell/bash/init
 source ~/.dotfiles/shell/bash/zoxide

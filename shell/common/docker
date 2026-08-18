@@ -1,0 +1,16 @@
+dockersoftcleanup() {
+  docker image prune
+}
+
+dockercleanup() {
+  docker container prune
+  docker image prune
+}
+
+dockercleanupvolumes() {
+  docker volume prune
+}
+
+dockercleanupimages() {
+  docker image prune --all
+}

@@ -1,0 +1,86 @@
+#!/bin/bash
+
+set -euo pipefail
+
+readonly DOTFILES_REPO_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")/.." && pwd)"
+export DOTFILES_REPO_DIR
+
+source "$DOTFILES_REPO_DIR/lib/dotfiles/log.sh"
+source "$DOTFILES_REPO_DIR/lib/dotfiles/paths.sh"
+
+usage() {
+  cat <<'EOF'
+Usage:
+  dotfiles dependencies <platform>
+  dotfiles install <platform> [--dry-run]
+  dotfiles verify <platform> [--links-only]
+  dotfiles platforms
+  dotfiles test
+  dotfiles help
+EOF
+}
+
+load_platform() {
+  local -r platform="$1"
+  local -r platform_dir="${DOTFILES_PLATFORM_DIR:-$DOTFILES_REPO_DIR/platforms}"
+  local -r manifest="$platform_dir/$platform.sh"
+
+  if [[ ! -f "$manifest" ]]; then
+    dotfiles_log "Unsupported platform: $platform"
+    return 1
+  fi
+
+  source "$DOTFILES_REPO_DIR/platforms/common.sh"
+  source "$manifest"
+  platform_prepare
+}
+
+main() {
+  local -r command="${1:-help}"
+  [[ $# -gt 0 ]] && shift
+
+  case "$command" in
+  dependencies)
+    local -r platform="${1:-}"
+    [[ -n "$platform" && $# -eq 1 ]] || { usage; return 1; }
+    local -r dependency_script="$DOTFILES_REPO_DIR/dependencies/$platform.sh"
+    [[ -f "$dependency_script" ]] || { dotfiles_log "Unsupported platform: $platform"; return 1; }
+    source "$dependency_script"
+    install_dependencies
+    ;;
+  install)
+    local -r platform="${1:-}"
+    [[ -n "$platform" ]] || { usage; return 1; }
+    shift
+    load_platform "$platform"
+    source "$DOTFILES_REPO_DIR/lib/dotfiles/backup.sh"
+    source "$DOTFILES_REPO_DIR/lib/dotfiles/install.sh"
+    install_platform "$@"
+    ;;
+  verify)
+    local -r platform="${1:-}"
+    [[ -n "$platform" ]] || { usage; return 1; }
+    shift
+    load_platform "$platform"
+    source "$DOTFILES_REPO_DIR/lib/dotfiles/verify.sh"
+    verify_platform "$@"
+    ;;
+  platforms)
+    printf '%s\n' macos omarchy ubuntu-vps
+    ;;
+  test)
+    "$DOTFILES_REPO_DIR/tests/install-smoke.sh"
+    "$DOTFILES_REPO_DIR/tests/cli-smoke.sh"
+    ;;
+  help | --help | -h)
+    usage
+    ;;
+  *)
+    dotfiles_log "Unknown command: $command"
+    usage
+    return 1
+    ;;
+  esac
+}
+
+main "$@"

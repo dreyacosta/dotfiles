@@ -1,1 +1,14 @@
+appletb
+autodim
+bootable
 dreyacosta
+journalctl
+limine
+mkinitcpio
+nvim
+omarchy
+pipefail
+readlink
+stylua
+touchbar
+wayback

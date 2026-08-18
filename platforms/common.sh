@@ -2,7 +2,7 @@
 
 readonly CONFIG_HOME="${XDG_CONFIG_HOME:-$HOME/.config}"
 
-common_links=(
+links=(
   ".|$HOME/.dotfiles"
   "home/cspell.json|$HOME/.cspell.json"
   "home/cspell-custom-words.txt|$HOME/.cspell-custom-words.txt"
@@ -15,20 +15,13 @@ common_links=(
   "config/tmux|$CONFIG_HOME/tmux"
   "config/tmux/tmux.conf|$HOME/.tmux.conf"
 )
+copies=()
+required_commands=(bat eza fd fzf git gum lazygit mise nvim rg starship tmux zoxide)
+required_services=()
+required_executables=("$HOME/.local/bin/tmux-sessionizer/tmux-sessionizer")
+mise_tools=()
+mise_config=""
 
-install_dotfiles() {
-  local platform="$1"
-  shift
-
-  export DOTFILES_BACKUP_DIR="${DOTFILES_BACKUP_DIR:-$HOME/dotfiles-wayback/$(date +%Y%m%d-%H%M%S)-$$}"
-
-  dotfiles-install "$platform" "$@" --links "${common_links[@]}" "${platform_links[@]}"
-
-  local etc_args=()
-  [[ ${#etc_links[@]} -gt 0 ]] && etc_args+=(--links "${etc_links[@]}")
-  [[ ${#etc_copies[@]} -gt 0 ]] && etc_args+=(--copies "${etc_copies[@]}")
-
-  if [[ ${#etc_args[@]} -gt 0 ]]; then
-    dotfiles-install-etc "$@" "${etc_args[@]}"
-  fi
-}
+platform_prepare() { return 0; }
+platform_post_install() { return 0; }
+platform_verify() { return 0; }

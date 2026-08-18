@@ -1,8 +1,8 @@
 source ~/.dotfiles/shell/zsh/brew
 source ~/.dotfiles/shell/zsh/init
-source ~/.dotfiles/shell/common/history-refresh
 source ~/.dotfiles/shell/common/aliases
 source ~/.dotfiles/shell/common/functions
+source ~/.dotfiles/shell/common/docker
 source ~/.dotfiles/shell/zsh/completions
 source ~/.dotfiles/shell/platform/macos/nvm
 source ~/.dotfiles/shell/common/envs
