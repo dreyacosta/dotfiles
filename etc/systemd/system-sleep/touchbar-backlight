@@ -4,8 +4,10 @@ set -u
 
 readonly BACKLIGHT_DIR="/sys/class/backlight/appletb_backlight"
 readonly DRIVER_DIR="/sys/bus/hid/drivers/hid-appletb-bl"
+readonly AUTODIM_PATH="/sys/module/hid_appletb_kbd/parameters/autodim"
 
-[[ "${1:-}" == "post" ]] || exit 0
+readonly ACTION="${1:-}"
+[[ "$ACTION" == "start" || "$ACTION" == "post" ]] || exit 0
 
 system_vendor=""
 product_name=""
@@ -13,19 +15,39 @@ product_name=""
 [[ -r /sys/class/dmi/id/product_name ]] && read -r product_name </sys/class/dmi/id/product_name
 [[ "$system_vendor" == "Apple Inc." && "$product_name" == MacBookPro* ]] || exit 0
 
+has_touchbar=false
+for hid_device in /sys/bus/hid/devices/*:05AC:8102.*; do
+  if [[ -e "$hid_device" ]]; then
+    has_touchbar=true
+    break
+  fi
+done
+[[ "$has_touchbar" == true ]] || exit 0
+
 for _ in {1..20}; do
-  if [[ -L "$BACKLIGHT_DIR/device" ]]; then
+  if [[ -e "$AUTODIM_PATH" && -L "$BACKLIGHT_DIR/device" ]]; then
     device_path="$(readlink -f "$BACKLIGHT_DIR/device")"
     device_id="${device_path##*/}"
 
     if [[ -e "$DRIVER_DIR/$device_id" ]]; then
-      if ! printf '%s' "$device_id" >"$DRIVER_DIR/unbind" ||
-        ! printf '%s' "$device_id" >"$DRIVER_DIR/bind" ||
-        ! printf '0' >"$BACKLIGHT_DIR/brightness"; then
-        logger -t touchbar-backlight "Failed to reset Touch Bar backlight after resume"
-      else
-        logger -t touchbar-backlight "Reset Touch Bar backlight after resume: $device_id"
+      if ! printf 'N' >"$AUTODIM_PATH"; then
+        logger -t touchbar-backlight "Failed to disable Touch Bar automatic brightness"
+        exit 0
       fi
+
+      if [[ "$ACTION" == "post" ]] &&
+        { ! printf '%s' "$device_id" >"$DRIVER_DIR/unbind" ||
+          ! printf '%s' "$device_id" >"$DRIVER_DIR/bind"; }; then
+        logger -t touchbar-backlight "Failed to rebind Touch Bar backlight after resume"
+        exit 0
+      fi
+
+      if ! printf '0' >"$BACKLIGHT_DIR/brightness"; then
+        logger -t touchbar-backlight "Failed to turn off Touch Bar backlight"
+        exit 0
+      fi
+
+      logger -t touchbar-backlight "Turned off Touch Bar backlight after $ACTION: $device_id"
       exit 0
     fi
   fi
@@ -33,4 +55,4 @@ for _ in {1..20}; do
   sleep 0.1
 done
 
-logger -t touchbar-backlight "Touch Bar backlight device was not available after resume"
+logger -t touchbar-backlight "Touch Bar backlight device was not available after $ACTION"

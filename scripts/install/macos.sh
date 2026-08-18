@@ -19,6 +19,7 @@ platform_links=(
 )
 
 etc_links=()
+etc_copies=()
 
 main() {
   install_dotfiles "macos" "$@"

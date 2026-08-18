@@ -24,7 +24,11 @@ install_dotfiles() {
 
   dotfiles-install "$platform" "$@" --links "${common_links[@]}" "${platform_links[@]}"
 
-  if [[ ${#etc_links[@]} -gt 0 ]]; then
-    dotfiles-install-etc "$@" --links "${etc_links[@]}"
+  local etc_args=()
+  [[ ${#etc_links[@]} -gt 0 ]] && etc_args+=(--links "${etc_links[@]}")
+  [[ ${#etc_copies[@]} -gt 0 ]] && etc_args+=(--copies "${etc_copies[@]}")
+
+  if [[ ${#etc_args[@]} -gt 0 ]]; then
+    dotfiles-install-etc "$@" "${etc_args[@]}"
   fi
 }

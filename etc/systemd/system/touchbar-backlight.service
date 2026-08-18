@@ -1,0 +1,10 @@
+[Unit]
+Description=Keep Apple Touch Bar backlight off
+After=systemd-modules-load.service
+
+[Service]
+Type=oneshot
+ExecStart=/etc/systemd/system-sleep/touchbar-backlight start
+
+[Install]
+WantedBy=multi-user.target

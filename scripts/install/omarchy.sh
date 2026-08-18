@@ -22,9 +22,33 @@ platform_links=(
 
 etc_links=(
   "etc/keyd/default.conf|/etc/keyd/default.conf"
+)
+
+etc_copies=(
+  "etc/modprobe.d/touchbar.conf|/etc/modprobe.d/touchbar.conf"
   "etc/systemd/system/systemd-suspend.service.d/touchbar-backlight.conf|/etc/systemd/system/systemd-suspend.service.d/touchbar-backlight.conf"
+  "etc/systemd/system/touchbar-backlight.service|/etc/systemd/system/touchbar-backlight.service"
   "etc/systemd/system-sleep/touchbar-backlight|/etc/systemd/system-sleep/touchbar-backlight"
 )
+
+is_touchbar_mac() {
+  local system_vendor=""
+  local product_name=""
+  local usb_device
+
+  [[ -r /sys/class/dmi/id/sys_vendor ]] && read -r system_vendor </sys/class/dmi/id/sys_vendor
+  [[ -r /sys/class/dmi/id/product_name ]] && read -r product_name </sys/class/dmi/id/product_name
+  [[ "$system_vendor" == "Apple Inc." && "$product_name" == MacBookPro* ]] || return 1
+
+  for usb_device in /sys/bus/usb/devices/*; do
+    if [[ -r "$usb_device/idVendor" && -r "$usb_device/idProduct" ]] &&
+      [[ "$(<"$usb_device/idVendor")" == "05ac" && "$(<"$usb_device/idProduct")" == "8102" ]]; then
+      return 0
+    fi
+  done
+
+  return 1
+}
 
 main() {
   local dry_run=false
@@ -37,6 +61,16 @@ main() {
   install_dotfiles "omarchy" "$@"
 
   if [[ "$dry_run" == false ]]; then
+    sudo systemctl daemon-reload
+    sudo systemctl enable --now touchbar-backlight.service
+    dotfiles-log "Enabled Touch Bar backlight service"
+
+    if is_touchbar_mac; then
+      dotfiles-log "Touch Bar configuration installed"
+      dotfiles-log "Run: sudo limine-mkinitcpio"
+      dotfiles-log "Then reboot to apply the Touch Bar module option during early boot"
+    fi
+
     sudo keyd reload
     dotfiles-log "Reloaded keyd configuration"
 

@@ -6,6 +6,7 @@ readonly REPO_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")/.." && pwd)"
 
 dry_run=false
 links=()
+copies=()
 section=""
 
 export DOTFILES_BACKUP_DIR="${DOTFILES_BACKUP_DIR:-$HOME/dotfiles-wayback/$(date +%Y%m%d-%H%M%S)-$$}"
@@ -14,6 +15,7 @@ for arg in "$@"; do
   case "$arg" in
   --dry-run) dry_run=true ;;
   --links) section="links" ;;
+  --copies) section="copies" ;;
   --*)
     dotfiles-log "Unknown argument: $arg"
     exit 1
@@ -21,6 +23,7 @@ for arg in "$@"; do
   *)
     case "$section" in
     links) links+=("$arg") ;;
+    copies) copies+=("$arg") ;;
     *)
       dotfiles-log "Unexpected argument: $arg"
       exit 1
@@ -28,6 +31,15 @@ for arg in "$@"; do
     esac
     ;;
   esac
+done
+
+for mapping in "${copies[@]}"; do
+  source_path="${mapping%%|*}"
+  target_path="${mapping#*|}"
+  if [[ "$mapping" != *"|"* || ! -f "$REPO_DIR/$source_path" || "$target_path" != /etc/* ]]; then
+    dotfiles-log "Invalid /etc copy mapping: $mapping"
+    exit 1
+  fi
 done
 
 for mapping in "${links[@]}"; do
@@ -67,4 +79,36 @@ for mapping in "${links[@]}"; do
   sudo mkdir -p "$(dirname "$target_path")"
   sudo ln -s "$expected_source" "$target_path"
   dotfiles-log "Linked: $target_path -> $expected_source"
+done
+
+for mapping in "${copies[@]}"; do
+  source_path="${mapping%%|*}"
+  target_path="${mapping#*|}"
+  expected_source="$REPO_DIR/$source_path"
+  source_mode="$(stat -c '%a' "$expected_source")"
+
+  if [[ -f "$target_path" && ! -L "$target_path" ]] &&
+    cmp -s "$expected_source" "$target_path" &&
+    [[ "$(stat -c '%a' "$target_path")" == "$source_mode" ]]; then
+    dotfiles-log "Already installed: $target_path"
+    continue
+  fi
+
+  if [[ "$dry_run" == true ]]; then
+    [[ -e "$target_path" || -L "$target_path" ]] && dotfiles-log "Would back up: $target_path"
+    dotfiles-log "Would copy with sudo: $expected_source -> $target_path"
+    continue
+  fi
+
+  if [[ -e "$target_path" || -L "$target_path" ]]; then
+    backup_path="$DOTFILES_BACKUP_DIR/${target_path#/}"
+    dotfiles-log "Backing up with sudo: $target_path -> $backup_path"
+    mkdir -p "$(dirname "$backup_path")"
+    sudo mv "$target_path" "$backup_path"
+    install_owner="${SUDO_USER:-${USER:-$(id -un)}}"
+    sudo chown -R "$install_owner:$install_owner" "$backup_path" 2>/dev/null || true
+  fi
+
+  sudo install -D -m "$source_mode" "$expected_source" "$target_path"
+  dotfiles-log "Copied: $expected_source -> $target_path"
 done

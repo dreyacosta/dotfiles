@@ -117,7 +117,8 @@ HOME="$platform_home" XDG_CONFIG_HOME="$platform_xdg" "$REPO_DIR/scripts/install
 
 etc_home="$TEST_DIR/etc-home"
 env -u DOTFILES_BACKUP_DIR HOME="$etc_home" dotfiles-install-etc --dry-run --links \
-  "etc/keyd/default.conf|/etc/keyd/default.conf" >/dev/null
+  "etc/keyd/default.conf|/etc/keyd/default.conf" --copies \
+  "etc/modprobe.d/touchbar.conf|/etc/modprobe.d/touchbar.conf" >/dev/null
 
 assert_contains "$REPO_DIR/config/mise/config.toml" 'python = "latest"'
 assert_contains "$REPO_DIR/config/mise/macos.toml" 'go = "latest"'
@@ -128,8 +129,12 @@ assert_contains "$REPO_DIR/scripts/install/omarchy-deps.sh" 'systemctl enable --
 assert_contains "$REPO_DIR/scripts/install/omarchy-deps.sh" 'Homebrew/install/HEAD/install.sh'
 assert_contains "$REPO_DIR/scripts/install/omarchy-deps.sh" 'omarchy pkg add base-devel procps-ng curl file git'
 assert_contains "$REPO_DIR/scripts/install/omarchy.sh" 'keyd reload'
+assert_contains "$REPO_DIR/scripts/install/omarchy.sh" 'etc/modprobe.d/touchbar.conf'
 assert_contains "$REPO_DIR/scripts/install/omarchy.sh" 'systemd-suspend.service.d/touchbar-backlight.conf'
+assert_contains "$REPO_DIR/scripts/install/omarchy.sh" 'touchbar-backlight.service'
+assert_contains "$REPO_DIR/scripts/install/omarchy.sh" 'systemctl daemon-reload'
 assert_contains "$REPO_DIR/scripts/install/omarchy.sh" 'etc/systemd/system-sleep/touchbar-backlight'
+assert_contains "$REPO_DIR/scripts/install/omarchy.sh" 'Run: sudo limine-mkinitcpio'
 assert_contains "$REPO_DIR/scripts/install/omarchy.sh" 'herdr server reload-config'
 assert_contains "$REPO_DIR/scripts/install/omarchy.sh" 'config/herdr/config.toml'
 assert_contains "$REPO_DIR/config/herdr/config.toml" 'prefix = "ctrl\+space"'
@@ -150,5 +155,6 @@ for verify_script in macos omarchy ubuntu-vps; do
 done
 bash -n "$REPO_DIR/scripts/verify/common.sh"
 bash -n "$REPO_DIR/etc/systemd/system-sleep/touchbar-backlight"
+assert_contains "$REPO_DIR/etc/modprobe.d/touchbar.conf" 'options hid_appletb_kbd autodim=0'
 
 printf 'Install smoke test passed\n'
