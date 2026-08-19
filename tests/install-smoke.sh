@@ -34,14 +34,4 @@ first_target="$(readlink "$XDG_CONFIG_HOME/git/config")"
 "$REPO_DIR/bin/dotfiles" install ubuntu-vps >/dev/null
 [[ "$(readlink "$XDG_CONFIG_HOME/git/config")" == "$first_target" ]] || fail "reinstall changed a correct link"
 
-wrapper_home="$TEST_DIR/wrapper-home"
-HOME="$wrapper_home" XDG_CONFIG_HOME="$wrapper_home/.config" \
-  "$REPO_DIR/scripts/install/macos.sh" --dry-run >/dev/null
-[[ ! -e "$wrapper_home/.dotfiles" ]] || fail "compatibility wrapper ignored dry-run"
-
-for platform in macos omarchy ubuntu-vps; do
-  [[ -x "$REPO_DIR/scripts/install/$platform.sh" ]] || fail "install wrapper is not executable: $platform"
-  [[ -x "$REPO_DIR/scripts/verify/$platform.sh" ]] || fail "verify wrapper is not executable: $platform"
-done
-
 printf 'Install smoke test passed\n'

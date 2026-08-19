@@ -37,7 +37,7 @@ safeguard.
 Run the normal Omarchy installer:
 
 ```bash
-./scripts/install/omarchy.sh
+bin/dotfiles install omarchy
 ```
 
 On matching hardware, rebuild the Unified Kernel Image (UKI) and reboot:

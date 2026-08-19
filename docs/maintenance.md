@@ -45,9 +45,8 @@ logic only for behavior that cannot be derived from those mappings.
 1. Add `platforms/<name>.sh` with mappings and verification declarations.
 2. Add `dependencies/<name>.sh` with `install_dependencies`.
 3. Register the name in `bin/dotfiles platforms`.
-4. Add compatibility wrappers only if an established command path needs preserving.
-5. Add an isolated CLI smoke-test scenario.
-6. Document platform-specific prerequisites or recovery steps.
+4. Add an isolated CLI smoke-test scenario.
+5. Document platform-specific prerequisites or recovery steps.
 
 ## Verification
 

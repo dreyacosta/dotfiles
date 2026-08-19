@@ -27,9 +27,6 @@ The dependency command installs packages and may change system services. The
 install command manages configuration links and selected `/etc` files. Existing
 targets are moved below `~/dotfiles-wayback` before replacement.
 
-The scripts under `scripts/install/` and `scripts/verify/` remain available as
-compatibility entry points.
-
 ## Documentation
 
 - [Installation, updates, recovery, and troubleshooting](docs/installation.md)
