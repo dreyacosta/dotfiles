@@ -5,12 +5,16 @@
 The Omarchy installer includes a workaround for an Apple T2 Touch Bar whose
 backlight turns on or flickers after boot, input, or suspend/resume.
 
-The observed behavior has two parts:
+The observed behavior has three parts:
 
 - The `hid_appletb_kbd` automatic dimming state machine changes brightness in
   response to Touch Bar activity and timeouts.
 - After resume, the backlight device can report brightness zero while the
   physical Touch Bar remains illuminated until its driver is rebound.
+- Occasionally the T2 virtual USB transport fails while suspending the Touch
+  Bar devices. Later HID brightness requests are accepted by Linux but never
+  reach the hardware, and the device may reject USB configuration with
+  `ETIMEDOUT` until the machine is restarted or fully powered off.
 
 ## Installed files
 
@@ -22,8 +26,8 @@ repository and home filesystem:
 | --- | --- | --- |
 | `etc/modprobe.d/touchbar.conf` | `/etc/modprobe.d/touchbar.conf` | Disables `hid_appletb_kbd` automatic dimming. |
 | `etc/systemd/system/touchbar-backlight.service` | `/etc/systemd/system/touchbar-backlight.service` | Turns the backlight off at normal boot. |
-| `etc/systemd/system-sleep/touchbar-backlight` | `/etc/systemd/system-sleep/touchbar-backlight` | Applies the boot or post-resume backlight action. |
-| `etc/systemd/system/systemd-suspend.service.d/touchbar-backlight.conf` | `/etc/systemd/system/systemd-suspend.service.d/touchbar-backlight.conf` | Runs the post-resume action after systemd suspend. |
+| `etc/systemd/system-sleep/touchbar-backlight` | `/etc/systemd/system-sleep/touchbar-backlight` | Unloads the Touch Bar HID modules before suspend, reloads them after resume, and applies the backlight action. |
+| `etc/systemd/system/systemd-suspend.service.d/touchbar-backlight.conf` | `/etc/systemd/system/systemd-suspend.service.d/touchbar-backlight.conf` | Runs the pre-suspend and post-resume actions around systemd suspend. |
 
 The installer verifies that the system is an Apple MacBook Pro and that the
 Apple `05ac:8102` Touch Bar backlight device exists before installing or
@@ -65,7 +69,12 @@ The expected values are `N`, followed by `0` and `0`. The service is a one-shot
 unit, so `inactive (dead)` after a successful run is normal.
 
 Close and reopen the lid, then check the brightness values again to exercise
-the resume path.
+the resume path. The log should show both actions:
+
+```text
+Unloaded Touch Bar HID modules before suspend
+Requested Touch Bar backlight off after post
+```
 
 ## Logs and recovery
 
@@ -77,14 +86,17 @@ journalctl -b -t touchbar-backlight
 ```
 
 If the physical backlight remains on while the reported brightness is zero,
-manually reproduce the resume reset with:
+check for a T2 USB transport failure:
 
 ```bash
-device_id="$(basename "$(readlink -f /sys/class/backlight/appletb_backlight/device)")"
-echo "$device_id" | sudo tee /sys/bus/hid/drivers/hid-appletb-bl/unbind
-echo "$device_id" | sudo tee /sys/bus/hid/drivers/hid-appletb-bl/bind
-echo 0 | sudo tee /sys/class/backlight/appletb_backlight/brightness
+journalctl -b -k | rg -i 't2bce|usb_submit_urb|suspend error|error -110'
 ```
+
+The HID driver submits brightness reports asynchronously, so a successful
+sysfs write does not prove the hardware received the request. If the log shows
+USB timeouts or `/sys/class/backlight/appletb_backlight` is missing, perform a
+full shutdown and power the laptop on again. Reloading only the Touch Bar HID
+drivers cannot recover a virtual USB channel that is already wedged.
 
 To turn the backlight on manually, write a supported value from zero through
 `max_brightness` to `brightness`. The tested device exposes a maximum of `2`:

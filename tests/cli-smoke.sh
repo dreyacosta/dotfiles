@@ -85,6 +85,15 @@ DOTFILES_TEST_TOUCHBAR=true "$REPO_DIR/bin/dotfiles" install omarchy >/dev/null
 assert_link "$DOTFILES_SYSTEM_ROOT/etc/keyd/default.conf" "$REPO_DIR/etc/keyd/default.conf"
 cmp -s "$REPO_DIR/etc/modprobe.d/touchbar.conf" \
   "$DOTFILES_SYSTEM_ROOT/etc/modprobe.d/touchbar.conf" || fail "Touch Bar configuration was not copied"
+cmp -s "$REPO_DIR/etc/systemd/system-sleep/touchbar-backlight" \
+  "$DOTFILES_SYSTEM_ROOT/etc/systemd/system-sleep/touchbar-backlight" || fail "Touch Bar helper was not copied"
+cmp -s "$REPO_DIR/etc/systemd/system/systemd-suspend.service.d/touchbar-backlight.conf" \
+  "$DOTFILES_SYSTEM_ROOT/etc/systemd/system/systemd-suspend.service.d/touchbar-backlight.conf" || \
+  fail "Touch Bar suspend drop-in was not copied"
+assert_contains "$(<"$REPO_DIR/etc/systemd/system/systemd-suspend.service.d/touchbar-backlight.conf")" \
+  "ExecStartPre=/etc/systemd/system-sleep/touchbar-backlight pre suspend"
+assert_contains "$(<"$REPO_DIR/etc/systemd/system-sleep/touchbar-backlight")" "modprobe -r hid_appletb_kbd"
+assert_contains "$(<"$REPO_DIR/etc/systemd/system-sleep/touchbar-backlight")" "modprobe hid_appletb_bl"
 assert_contains "$(<"$DOTFILES_COMMAND_LOG")" "keyd reload"
 
 "$REPO_DIR/bin/dotfiles" dependencies omarchy >/dev/null
