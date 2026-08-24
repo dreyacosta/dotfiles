@@ -36,7 +36,6 @@ install_nvm() {
   fi
   source "$NVM_DIR/nvm.sh"
   nvm install --lts
-  npm install --global @vlabo/cspell-lsp cspell
 }
 
 install_dependencies() {
@@ -44,9 +43,11 @@ install_dependencies() {
   install_macos_homebrew
   activate_macos_homebrew
   install_common_brew_packages
-  brew install zsh-autosuggestions
-  MISE_CONFIG_FILE="$DOTFILES_REPO_DIR/config/mise/macos.toml" mise install
   install_nvm
+  install_mise_tools
+  brew install herdr jq
+  install_herdr_plugins
+  brew install zsh-autosuggestions
   install_tmux_sessionizer
   brew install --cask font-jetbrains-mono-nerd-font docker ghostty karabiner-elements
 }

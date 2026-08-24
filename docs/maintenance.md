@@ -6,15 +6,19 @@
 the installer, verifier, or dependency workflow behind that interface.
 
 Platform manifests under `platforms/` are the single source of truth for
-managed links, copies, commands, services, and mise tools. Both installation
-and verification consume the same declarations. Loading a manifest must be
-side-effect free; machine changes belong in dependency workflows or explicit
-post-install hooks.
+managed links, copies, commands, services, and the active Mise configuration.
+The `[tools]` table in that Mise configuration is the tool inventory. Both
+installation and verification consume these declarations. Loading a manifest
+must be side-effect free; machine changes belong in dependency workflows or
+explicit post-install hooks.
 
 The installer modules under `lib/dotfiles/` own validation, backups, dry-run
 behavior, idempotency, filesystem changes, and summaries. Dependency scripts
 under `dependencies/` own package managers, remote installers, services, and
 group membership.
+
+Choose the dependency owner according to [Tool management](tool-management.md)
+before adding or moving a tool.
 
 ## Invariants
 

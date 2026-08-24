@@ -11,7 +11,7 @@ install_apt_packages() {
   fi
 
   sudo apt update
-  sudo apt install -y build-essential ca-certificates curl file git procps unzip
+  sudo apt install -y build-essential ca-certificates curl file git jq procps unzip
   sudo install -m 0755 -d /etc/apt/keyrings
   sudo curl -fsSL https://download.docker.com/linux/ubuntu/gpg -o /etc/apt/keyrings/docker.asc
   sudo chmod a+r /etc/apt/keyrings/docker.asc
@@ -45,8 +45,12 @@ install_dependencies() {
   install_apt_packages
   install_linux_homebrew
   activate_linux_homebrew
+  # Ubuntu package names and release ages vary for this user-space CLI bundle;
+  # Linux Homebrew provides consistent commands and current versions.
   install_common_brew_packages
-  install_linux_mise_tools
+  install_mise_tools
+  brew install herdr
+  install_herdr_plugins
   install_tmux_sessionizer
   enable_docker
 }

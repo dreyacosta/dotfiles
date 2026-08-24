@@ -62,12 +62,15 @@ check_service() {
   systemctl is-active --quiet "$service" >/dev/null 2>&1 && verify_pass "service active: $service" || verify_fail "service not active: $service"
 }
 
-check_mise_tool() {
-  local -r tool="$1"
-  if MISE_CONFIG_FILE="$DOTFILES_REPO_DIR/$mise_config" mise exec -- bash -c 'command -v "$1"' _ "$tool" >/dev/null 2>&1; then
-    verify_pass "mise tool available: $tool"
+check_mise_tools() {
+  local missing_tools
+
+  if ! missing_tools="$(MISE_CONFIG_FILE="$DOTFILES_REPO_DIR/$mise_config" mise ls --missing 2>&1)"; then
+    verify_fail "unable to inspect Mise tools: $missing_tools"
+  elif [[ -n "$missing_tools" ]]; then
+    verify_fail "Mise tools missing: $missing_tools"
   else
-    verify_fail "mise tool missing: $tool"
+    verify_pass "all configured Mise tools installed"
   fi
 }
 
@@ -90,7 +93,7 @@ verify_platform() {
     for item in "${required_commands[@]}"; do check_command "$item"; done
     for item in "${required_services[@]}"; do check_service "$item"; done
     for item in "${required_executables[@]}"; do check_executable "$item"; done
-    for item in "${mise_tools[@]}"; do check_mise_tool "$item"; done
+    [[ -n "$mise_config" ]] && check_mise_tools
   fi
 
   printf '\nVerification complete: %d passed, %d failed\n' "$verify_passed" "$verify_failed"

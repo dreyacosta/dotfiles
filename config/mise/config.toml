@@ -4,8 +4,10 @@ trusted_config_paths = ['~/projects']
 [tools]
 bun = "latest"
 codex = "latest"
+cspell = "latest"
 gh = "latest"
 go = "latest"
-node = "latest"
+node = { version = "latest", os = ["linux"] }
+"npm:@vlabo/cspell-lsp" = "latest"
 opencode = "latest"
 python = "latest"

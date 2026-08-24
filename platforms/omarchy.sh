@@ -5,8 +5,6 @@ touchbar_mac=false
 links+=(
   "home/ideavimrc|$HOME/.ideavimrc"
   "shell/platform/omarchy/bashrc|$HOME/.bashrc"
-  "config/mise/config.toml|$CONFIG_HOME/mise/config.toml"
-  "config/herdr/config.toml|$CONFIG_HOME/herdr/config.toml"
   "config/hypr/bindings.lua|$CONFIG_HOME/hypr/bindings.lua"
   "config/hypr/input.lua|$CONFIG_HOME/hypr/input.lua"
   "config/ghostty/config|$CONFIG_HOME/ghostty/config"
@@ -14,11 +12,8 @@ links+=(
   "config/git/linux|$CONFIG_HOME/git/config"
   "etc/keyd/default.conf|/etc/keyd/default.conf"
 )
-required_commands+=(brew docker herdr keyd)
+required_commands+=(brew docker keyd)
 required_services=(keyd)
-mise_config="config/mise/config.toml"
-mise_tools=(go node python cspell-lsp)
-
 is_touchbar_mac() {
   local system_vendor=""
   local product_name=""
@@ -58,13 +53,15 @@ platform_post_install() {
   fi
   sudo keyd reload
   dotfiles_log "Reloaded keyd configuration"
-  if herdr status server >/dev/null 2>&1; then
-    herdr server reload-config
-    dotfiles_log "Reloaded Herdr configuration"
-  fi
+  reload_herdr_config "${DOTFILES_OMARCHY_HERDR:-/usr/bin/herdr}"
 }
 
 platform_verify() {
+  local package_name
+
   command -v omarchy >/dev/null 2>&1 && verify_pass "platform command available: omarchy" || verify_fail "platform command missing: omarchy"
   [[ -f /usr/share/omarchy/default/bash/rc ]] && verify_pass "file exists: /usr/share/omarchy/default/bash/rc" || verify_fail "file missing: /usr/share/omarchy/default/bash/rc"
+  for package_name in herdr jq; do
+    pacman -Q "$package_name" >/dev/null 2>&1 && verify_pass "Pacman package installed: $package_name" || verify_fail "Pacman package missing: $package_name"
+  done
 }

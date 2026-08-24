@@ -1,0 +1,16 @@
+[projects]
+# Parent folders searched by the interactive pickers
+roots = ["~/projects"]
+# true: only git repos; false: all immediate child folders
+git_only = true
+# Only used when git_only = true; 1 means immediate children
+depth = 1
+
+[ui]
+# How Sessionizer / Worktree pickers open in Herdr: overlay | split | popup
+# popup requires Herdr >= 0.7.4 (width/height only apply to popup)
+placement = "overlay"
+
+[layout]
+# Which pane or tab to focus after layout creation
+focus = "editor"

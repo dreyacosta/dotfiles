@@ -1,6 +1,0 @@
-[settings]
-trusted_config_paths = ['~/projects']
-
-[tools]
-go = "latest"
-python = "latest"

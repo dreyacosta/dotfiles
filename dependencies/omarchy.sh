@@ -15,11 +15,11 @@ require_omarchy_baseline() {
 
 install_dependencies() {
   require_omarchy_baseline
-  omarchy pkg add keyd
+  omarchy pkg add base-devel curl file git herdr jq keyd procps-ng
   sudo systemctl enable --now keyd
-  omarchy pkg add base-devel procps-ng curl file git
   install_linux_homebrew
   activate_linux_homebrew
-  install_linux_mise_tools
+  install_mise_tools
+  HERDR_EXECUTABLE="${DOTFILES_OMARCHY_HERDR:-/usr/bin/herdr}" install_herdr_plugins
   install_tmux_sessionizer
 }

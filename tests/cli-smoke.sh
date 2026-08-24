@@ -13,11 +13,14 @@ export DOTFILES_BACKUP_DIR="$TEST_DIR/backups/run"
 readonly FAKE_BIN="$TEST_DIR/bin"
 export DOTFILES_COMMAND_LOG="$TEST_DIR/commands.log"
 mkdir -p "$HOME" "$XDG_CONFIG_HOME" "$DOTFILES_SYSTEM_ROOT/etc" "$FAKE_BIN"
+export DOTFILES_OMARCHY_HERDR="$FAKE_BIN/herdr"
 
 for command_name in brew docker git herdr keyd mise omarchy sudo systemctl tmux; do
   printf '#!/bin/bash\nprintf "%%s\\n" "$(basename "$0") $*" >>"$DOTFILES_COMMAND_LOG"\n' >"$FAKE_BIN/$command_name"
   chmod +x "$FAKE_BIN/$command_name"
 done
+printf '#!/bin/bash\nprintf "jq %%s\\n" "$*" >>"$DOTFILES_COMMAND_LOG"\nexit 1\n' >"$FAKE_BIN/jq"
+chmod +x "$FAKE_BIN/jq"
 export PATH="$FAKE_BIN:$PATH"
 mkdir -p "$HOME/.local/bin/tmux-sessionizer"
 printf '#!/bin/bash\n' >"$HOME/.local/bin/tmux-sessionizer/tmux-sessionizer"
@@ -98,7 +101,12 @@ assert_contains "$(<"$DOTFILES_COMMAND_LOG")" "keyd reload"
 
 "$REPO_DIR/bin/dotfiles" dependencies omarchy >/dev/null
 command_log="$(<"$DOTFILES_COMMAND_LOG")"
-assert_contains "$command_log" "omarchy pkg add keyd"
+assert_contains "$command_log" "omarchy pkg add base-devel curl file git herdr jq keyd procps-ng"
+assert_contains "$command_log" "mise exec -- $FAKE_BIN/herdr plugin install andrewchng/herdr-sessionizer --ref e3cdab0d8886c9dc2c50a6e09da334d6508fae7b --yes"
+assert_contains "$command_log" "mise exec -- $FAKE_BIN/herdr plugin install paulbkim-dev/vim-herdr-navigation --ref 820d48f5d9c9a7dece6a4bebfa3982ec30bbfbb7 --yes"
 assert_contains "$command_log" "mise install"
+assert_contains "$command_log" "brew shellenv bash"
+[[ "$command_log" != *"mise install herdr"* ]] || fail "existing Herdr was reinstalled through mise"
+[[ "$command_log" != *"brew install"* ]] || fail "Omarchy dependencies installed a package through Homebrew"
 
 printf 'CLI smoke test passed\n'

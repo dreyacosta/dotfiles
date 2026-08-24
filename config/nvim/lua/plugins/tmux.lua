@@ -1,5 +1,6 @@
 return {
   "christoomey/vim-tmux-navigator",
+  lazy = false,
   cmd = {
     "TmuxNavigateLeft",
     "TmuxNavigateDown",
@@ -14,4 +15,10 @@ return {
     { "<c-l>", "<cmd><C-U>TmuxNavigateRight<cr>" },
     { "<c-\\>", "<cmd><C-U>TmuxNavigatePrevious<cr>" },
   },
+  init = function()
+    vim.g.tmux_navigator_no_mappings = 1
+  end,
+  config = function()
+    require("integrations.herdr_navigation")
+  end,
 }

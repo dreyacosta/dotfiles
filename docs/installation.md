@@ -18,9 +18,11 @@ Dependency provisioning and configuration installation are separate. Rerunning
 an install does not repeat package-manager work.
 
 The dependency command can install packages, enable services, and add the user
-to system groups. Read its output for required logout or reboot steps. On macOS,
-Node is managed by nvm while Go and Python are managed by mise. Linux platforms
-use mise for Go, Node, and Python.
+to system groups. Read its output for required logout or reboot steps. Every
+platform uses the shared Mise configuration for development tools. macOS also
+installs nvm from its official GitHub repository and installs its current LTS
+Node. Mise skips its Node declaration on macOS; the cspell command-line tools
+remain Mise-managed and run against nvm's Node there.
 
 ## Backups and recovery
 
@@ -53,6 +55,11 @@ Correct links and copies are left unchanged. Files in application-managed
 directories are linked individually, so unrelated application state is
 preserved.
 
+The shared Mise configuration owns Go, Python, Bun, and npm-backed command-line
+tools on every platform, plus Node on Linux. Herdr is not Mise-managed: Omarchy
+owns it as an Arch package, while macOS and Ubuntu use its
+officially supported Homebrew package. See [Tool management](tool-management.md)
+for the cross-platform ownership convention.
 Mise configurations currently use `latest` tool versions. A dependency rerun
 can therefore upgrade tools without a corresponding repository change.
 
