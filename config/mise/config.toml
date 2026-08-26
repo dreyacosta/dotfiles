@@ -3,8 +3,10 @@ trusted_config_paths = ['~/projects']
 
 [tools]
 bun = "latest"
+claude = "latest"
 codex = "latest"
 cspell = "latest"
+gemini = { version = "latest", allow_builds = ["@github/keytar", "node-pty"] }
 gh = "latest"
 go = "latest"
 node = { version = "latest", os = ["linux"] }
