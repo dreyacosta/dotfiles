@@ -29,6 +29,8 @@ check_link_mapping() {
     verify_fail "symlink missing: $target_path"
   elif [[ "$(readlink "$actual_target")" != "$DOTFILES_REPO_DIR/$source_path" ]]; then
     verify_fail "symlink target is incorrect: $target_path"
+  elif [[ ! -e "$actual_target" ]]; then
+    verify_fail "symlink target is missing: $target_path"
   else
     verify_pass "symlink installed: $target_path"
   fi
@@ -85,14 +87,15 @@ verify_platform() {
     esac
   done
 
-  for mapping in "${links[@]}"; do check_link_mapping "$mapping"; done
-  for mapping in "${copies[@]}"; do check_copy_mapping "$mapping"; done
+  # The + form keeps empty arrays safe under macOS's Bash 3.2 with nounset.
+  for mapping in ${links[@]+"${links[@]}"}; do check_link_mapping "$mapping"; done
+  for mapping in ${copies[@]+"${copies[@]}"}; do check_copy_mapping "$mapping"; done
 
   if [[ "$links_only" == false ]]; then
     platform_verify
-    for item in "${required_commands[@]}"; do check_command "$item"; done
-    for item in "${required_services[@]}"; do check_service "$item"; done
-    for item in "${required_executables[@]}"; do check_executable "$item"; done
+    for item in ${required_commands[@]+"${required_commands[@]}"}; do check_command "$item"; done
+    for item in ${required_services[@]+"${required_services[@]}"}; do check_service "$item"; done
+    for item in ${required_executables[@]+"${required_executables[@]}"}; do check_executable "$item"; done
     [[ -n "$mise_config" ]] && check_mise_tools
   fi
 

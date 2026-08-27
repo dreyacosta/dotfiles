@@ -42,6 +42,37 @@ backup_name_for() {
   fi
 }
 
+home_symlink_ancestor() {
+  local path
+  path="$(dirname "$1")"
+
+  while [[ "$path" == "$HOME/"* ]]; do
+    if [[ -L "$path" ]]; then
+      printf '%s\n' "$path"
+      return
+    fi
+    path="$(dirname "$path")"
+  done
+}
+
+prepare_link_parent() {
+  local -r target_path="$1"
+  local -r dry_run="$2"
+  local symlink_ancestor
+  symlink_ancestor="$(home_symlink_ancestor "$target_path")"
+
+  [[ -n "$symlink_ancestor" ]] || return 0
+
+  if [[ "$dry_run" == true ]]; then
+    dotfiles_log "Would back up symlinked parent: $symlink_ancestor"
+    dotfiles_log "Would create directory: $symlink_ancestor"
+    return
+  fi
+
+  backup_target "$symlink_ancestor" "$(backup_name_for "$symlink_ancestor")"
+  mkdir -p "$symlink_ancestor"
+}
+
 install_link() {
   local -r mapping="$1"
   local -r dry_run="$2"
@@ -55,6 +86,8 @@ install_link() {
     actual_target="$(system_target "$target_path")"
     privileged=true
   fi
+
+  [[ "$privileged" == true ]] || prepare_link_parent "$actual_target" "$dry_run"
 
   if [[ -L "$actual_target" && "$(readlink "$actual_target")" == "$expected_source" ]]; then
     dotfiles_log "Already installed: $target_path"
@@ -129,10 +162,11 @@ install_platform() {
     esac
   done
 
-  for mapping in "${links[@]}"; do
+  # The + form keeps empty arrays safe under macOS's Bash 3.2 with nounset.
+  for mapping in ${links[@]+"${links[@]}"}; do
     validate_mapping link "$mapping"
   done
-  for mapping in "${copies[@]}"; do
+  for mapping in ${copies[@]+"${copies[@]}"}; do
     validate_mapping copy "$mapping"
   done
 
@@ -140,10 +174,10 @@ install_platform() {
   dotfiles_log "Installing dotfiles for $platform_name"
   [[ "$dry_run" == true ]] && dotfiles_log "Dry run: no changes will be made"
 
-  for mapping in "${links[@]}"; do
+  for mapping in ${links[@]+"${links[@]}"}; do
     install_link "$mapping" "$dry_run"
   done
-  for mapping in "${copies[@]}"; do
+  for mapping in ${copies[@]+"${copies[@]}"}; do
     install_copy "$mapping" "$dry_run"
   done
 

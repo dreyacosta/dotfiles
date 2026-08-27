@@ -22,8 +22,7 @@ platform_verify() {
   [[ -n "${XDG_CONFIG_HOME:-}" ]] && nvm_dir="$XDG_CONFIG_HOME/nvm"
   if NVM_DIR="$nvm_dir" bash -c '
     source "$NVM_DIR/nvm.sh"
-    lts_version="$(nvm version --lts)"
-    [[ "$lts_version" != "N/A" ]] && nvm use --silent "$lts_version" && command -v node
+    nvm use --silent --lts && command -v node
   ' >/dev/null 2>&1; then
     verify_pass "nvm LTS Node available"
   else

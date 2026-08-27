@@ -75,6 +75,33 @@ HOME="$dry_home" XDG_CONFIG_HOME="$dry_home/.config" \
   "$REPO_DIR/bin/dotfiles" install macos --dry-run >/dev/null
 [[ ! -e "$dry_home/.dotfiles" ]] || fail "dry run changed the filesystem"
 
+migration_repo="$TEST_DIR/migration-repo"
+migration_home="$TEST_DIR/migration-home"
+mkdir -p "$migration_repo" "$migration_home/.config"
+cp -R "$REPO_DIR/bin" "$REPO_DIR/config" "$REPO_DIR/home" "$REPO_DIR/lib" \
+  "$REPO_DIR/platforms" "$REPO_DIR/shell" "$migration_repo/"
+ln -s "$migration_repo/config/tmux-sessionizer" "$migration_home/.config/tmux-sessionizer"
+HOME="$migration_home" XDG_CONFIG_HOME="$migration_home/.config" \
+  DOTFILES_BACKUP_DIR="$TEST_DIR/migration-backup" \
+  "$migration_repo/bin/dotfiles" install macos >/dev/null
+[[ -d "$migration_home/.config/tmux-sessionizer" && ! -L "$migration_home/.config/tmux-sessionizer" ]] || \
+  fail "symlinked parent directory was not migrated"
+assert_link "$migration_home/.config/tmux-sessionizer/tmux-sessionizer.conf" \
+  "$migration_repo/config/tmux-sessionizer/tmux-sessionizer.conf"
+[[ -f "$migration_repo/config/tmux-sessionizer/tmux-sessionizer.conf" && \
+  ! -L "$migration_repo/config/tmux-sessionizer/tmux-sessionizer.conf" ]] || \
+  fail "symlinked parent migration replaced the repository source"
+rm "$migration_repo/config/tmux-sessionizer/tmux-sessionizer.conf"
+ln -s "$migration_repo/config/tmux-sessionizer/tmux-sessionizer.conf" \
+  "$migration_repo/config/tmux-sessionizer/tmux-sessionizer.conf"
+dangling_output=""
+if dangling_output="$(HOME="$migration_home" XDG_CONFIG_HOME="$migration_home/.config" \
+  "$migration_repo/bin/dotfiles" verify macos --links-only 2>&1)"; then
+  fail "dangling symlink passed verification"
+fi
+assert_contains "$dangling_output" \
+  "symlink target is missing: $migration_home/.config/tmux-sessionizer/tmux-sessionizer.conf"
+
 "$REPO_DIR/bin/dotfiles" install ubuntu-vps >/dev/null
 assert_link "$HOME/.dotfiles" "$REPO_DIR/."
 assert_link "$HOME/.bashrc" "$REPO_DIR/shell/platform/ubuntu-vps/bashrc"
