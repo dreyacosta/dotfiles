@@ -68,7 +68,8 @@ can therefore upgrade tools without a corresponding repository change.
 On Omarchy, dependency provisioning installs Voxtype and its typing backend,
 downloads the configured multilingual Whisper model, and enables the user
 service. Configuration installation starts the service after linking its
-configuration. The physical Super+V shortcut is mapped through keyd.
+configuration. Omarchy's default F9 push-to-talk and Super+Control+X toggle
+bindings control Voxtype without replacing its Super+V universal paste binding.
 
 On macOS, launch Voxtype after installation and complete its setup wizard.
 Download the `small` model, grant Microphone and Accessibility access, and
