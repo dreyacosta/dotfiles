@@ -32,9 +32,15 @@
 -- o.bind("SUPER + H", nil, "voxtype record toggle")
 -- o.bind("SUPER + PERIOD", nil, "omarchy-shell shell toggle omarchy.emojis")
 
+-- Push to talk with SUPER + V.
+hl.unbind("SUPER + V")
+o.bind("SUPER + V", "Start dictation (push-to-talk)", "voxtype record start")
+o.bind("SUPER + V", "Stop dictation (push-to-talk)", "voxtype record stop", { release = true })
+
 -- Open the Omarchy menu with the physical Super key, which keyd maps to Control.
 o.bind("CTRL + SPACE", "Omarchy menu", "omarchy-menu toggle root")
 o.bind("CTRL + Q", "Close window", hl.dsp.window.close())
+o.bind("CTRL + SHIFT + SPACE", "Switch keyboard layout", "hyprctl switchxkblayout all next")
 
 -- Switch workspaces and move windows with CTRL instead of SUPER.
 -- for workspace = 1, 10 do

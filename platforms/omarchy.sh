@@ -10,6 +10,7 @@ links+=(
   "config/ghostty/config|$CONFIG_HOME/ghostty/config"
   "config/ghostty/themes/Tokyonight Night|$CONFIG_HOME/ghostty/themes/Tokyonight Night"
   "config/git/linux|$CONFIG_HOME/git/config"
+  "config/voxtype/omarchy.toml|$CONFIG_HOME/voxtype/config.toml"
   "etc/keyd/default.conf|/etc/keyd/default.conf"
 )
 required_commands+=(brew docker keyd)

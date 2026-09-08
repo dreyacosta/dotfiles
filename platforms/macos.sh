@@ -8,8 +8,9 @@ links+=(
   "config/ghostty/config|$HOME/Library/Application Support/com.mitchellh.ghostty/config"
   "config/ghostty/themes/Tokyonight Night|$HOME/Library/Application Support/com.mitchellh.ghostty/themes/Tokyonight Night"
   "config/git/macos|$CONFIG_HOME/git/config"
+  "config/voxtype/macos.toml|$HOME/Library/Application Support/voxtype/config.toml"
 )
-required_commands+=(brew)
+required_commands+=(brew voxtype)
 
 platform_verify() {
   local nvm_dir="$HOME/.nvm"
