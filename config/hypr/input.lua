@@ -5,9 +5,8 @@
 -- See https://wiki.hypr.land/Configuring/Basics/Variables/#input
 hl.config({
   input = {
-    -- Use multiple keyboard layouts and switch between them with Left Alt + Right Alt.
-    -- kb_layout = "us,dk,eu",
-    -- kb_options = "compose:caps,shift:both_capslock_cancel,grp:alts_toggle",
+    -- Use English (US) and Spanish (Spain).
+    kb_layout = "us,es",
 
     -- Use a specific keyboard variant if needed (e.g. intl for international keyboards).
     -- kb_variant = "intl",
@@ -25,9 +24,11 @@ hl.config({
     -- Turn off mouse acceleration (default: adaptive).
     -- accel_profile = "flat",
 
+    natural_scroll = true,
+
     touchpad = {
       -- Use natural (inverse) scrolling.
-      natural_scroll = true,
+      -- natural_scroll = true,
 
       -- Use two-finger clicks for right-click instead of lower-right corner.
       -- clickfinger_behavior = true,
