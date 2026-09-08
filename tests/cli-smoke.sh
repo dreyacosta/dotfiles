@@ -8,6 +8,7 @@ trap 'rm -rf "$TEST_DIR"' EXIT
 
 export HOME="$TEST_DIR/home"
 export XDG_CONFIG_HOME="$HOME/.config"
+export XDG_DATA_HOME="$HOME/.local/share"
 export DOTFILES_SYSTEM_ROOT="$TEST_DIR/system"
 export DOTFILES_BACKUP_DIR="$TEST_DIR/backups/run"
 readonly FAKE_BIN="$TEST_DIR/bin"
@@ -15,10 +16,14 @@ export DOTFILES_COMMAND_LOG="$TEST_DIR/commands.log"
 mkdir -p "$HOME" "$XDG_CONFIG_HOME" "$DOTFILES_SYSTEM_ROOT/etc" "$FAKE_BIN"
 export DOTFILES_OMARCHY_HERDR="$FAKE_BIN/herdr"
 
-for command_name in brew docker git herdr keyd mise omarchy sudo systemctl tmux; do
+for command_name in brew docker git herdr keyd mise omarchy sudo systemctl tmux voxtype wtype; do
   printf '#!/bin/bash\nprintf "%%s\\n" "$(basename "$0") $*" >>"$DOTFILES_COMMAND_LOG"\n' >"$FAKE_BIN/$command_name"
   chmod +x "$FAKE_BIN/$command_name"
 done
+printf '#!/bin/bash\noutput_path=""\nwhile [[ "$#" -gt 0 ]]; do\n  if [[ "$1" == "-o" ]]; then output_path="$2"; shift 2; else shift; fi\ndone\n: >"$output_path"\nprintf "curl download %s\\n" "$output_path" >>"$DOTFILES_COMMAND_LOG"\n' >"$FAKE_BIN/curl"
+chmod +x "$FAKE_BIN/curl"
+printf '#!/bin/bash\ncat >/dev/null\nexit 0\n' >"$FAKE_BIN/sha256sum"
+chmod +x "$FAKE_BIN/sha256sum"
 printf '#!/bin/bash\nprintf "jq %%s\\n" "$*" >>"$DOTFILES_COMMAND_LOG"\nexit 1\n' >"$FAKE_BIN/jq"
 chmod +x "$FAKE_BIN/jq"
 export PATH="$FAKE_BIN:$PATH"
@@ -124,11 +129,14 @@ assert_contains "$(<"$REPO_DIR/etc/systemd/system/systemd-suspend.service.d/touc
   "ExecStartPre=/etc/systemd/system-sleep/touchbar-backlight pre suspend"
 assert_contains "$(<"$REPO_DIR/etc/systemd/system-sleep/touchbar-backlight")" "modprobe -r hid_appletb_kbd"
 assert_contains "$(<"$REPO_DIR/etc/systemd/system-sleep/touchbar-backlight")" "modprobe hid_appletb_bl"
-assert_contains "$(<"$DOTFILES_COMMAND_LOG")" "keyd reload"
+assert_contains "$(<"$DOTFILES_COMMAND_LOG")" "sudo systemctl restart keyd.service"
+assert_contains "$(<"$DOTFILES_COMMAND_LOG")" "systemctl --user restart voxtype.service"
 
 "$REPO_DIR/bin/dotfiles" dependencies omarchy >/dev/null
 command_log="$(<"$DOTFILES_COMMAND_LOG")"
-assert_contains "$command_log" "omarchy pkg add base-devel curl file git herdr jq keyd procps-ng"
+assert_contains "$command_log" "omarchy pkg add base-devel curl file git herdr jq keyd procps-ng voxtype-bin wtype"
+assert_contains "$command_log" "systemctl --user enable voxtype.service"
+[[ -f "$HOME/.local/share/voxtype/models/ggml-small.bin" ]] || fail "Voxtype small model was not installed"
 assert_contains "$command_log" "mise exec -- $FAKE_BIN/herdr plugin install andrewchng/herdr-sessionizer --ref e3cdab0d8886c9dc2c50a6e09da334d6508fae7b --yes"
 assert_contains "$command_log" "mise exec -- $FAKE_BIN/herdr plugin install paulbkim-dev/vim-herdr-navigation --ref 820d48f5d9c9a7dece6a4bebfa3982ec30bbfbb7 --yes"
 assert_contains "$command_log" "mise install"

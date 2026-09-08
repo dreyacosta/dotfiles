@@ -63,6 +63,18 @@ for the cross-platform ownership convention.
 Mise configurations currently use `latest` tool versions. A dependency rerun
 can therefore upgrade tools without a corresponding repository change.
 
+### Voxtype
+
+On Omarchy, dependency provisioning installs Voxtype and its typing backend,
+downloads the configured multilingual Whisper model, and enables the user
+service. Configuration installation starts the service after linking its
+configuration. The physical Super+V shortcut is mapped through keyd.
+
+On macOS, launch Voxtype after installation and complete its setup wizard.
+Download the `small` model, grant Microphone and Accessibility access, and
+enable launch at login. macOS requires those privacy permissions to be granted
+interactively.
+
 ## Troubleshooting
 
 - A wrong symlink after moving the repository is corrected by rerunning install.

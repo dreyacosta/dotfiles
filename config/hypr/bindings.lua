@@ -32,10 +32,10 @@
 -- o.bind("SUPER + H", nil, "voxtype record toggle")
 -- o.bind("SUPER + PERIOD", nil, "omarchy-shell shell toggle omarchy.emojis")
 
--- Push to talk with SUPER + V.
-hl.unbind("SUPER + V")
-o.bind("SUPER + V", "Start dictation (push-to-talk)", "voxtype record start")
-o.bind("SUPER + V", "Stop dictation (push-to-talk)", "voxtype record stop", { release = true })
+-- keyd maps the physical Super key to Control, so logical CTRL + V is physical Super + V.
+hl.unbind("CTRL + V")
+o.bind("CTRL + V", "Start dictation (push-to-talk)", "voxtype record start")
+o.bind("CTRL + V", "Stop dictation (push-to-talk)", "voxtype record stop", { release = true })
 
 -- Open the Omarchy menu with the physical Super key, which keyd maps to Control.
 o.bind("CTRL + SPACE", "Omarchy menu", "omarchy-menu toggle root")

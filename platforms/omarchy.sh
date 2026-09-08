@@ -13,7 +13,7 @@ links+=(
   "config/voxtype/omarchy.toml|$CONFIG_HOME/voxtype/config.toml"
   "etc/keyd/default.conf|/etc/keyd/default.conf"
 )
-required_commands+=(brew docker keyd)
+required_commands+=(brew docker keyd voxtype wtype)
 required_services=(keyd)
 is_touchbar_mac() {
   local system_vendor=""
@@ -52,12 +52,18 @@ platform_post_install() {
     dotfiles_log "Run: sudo limine-mkinitcpio"
     dotfiles_log "Then reboot to apply the Touch Bar module option during early boot"
   fi
-  sudo keyd reload
-  dotfiles_log "Reloaded keyd configuration"
+  sudo systemctl restart keyd.service
+  dotfiles_log "Restarted keyd service"
+  if command -v voxtype >/dev/null 2>&1; then
+    systemctl --user restart voxtype.service
+    dotfiles_log "Restarted Voxtype service"
+  fi
   reload_herdr_config "${DOTFILES_OMARCHY_HERDR:-/usr/bin/herdr}"
 }
 
 platform_verify() {
+  local -r voxtype_model="${XDG_DATA_HOME:-$HOME/.local/share}/voxtype/models/ggml-small.bin"
+  local -r voxtype_model_sha256="1be3a9b2063867b937e64e2ec7483364a79917e157fa98c5d94b5c1fffea987b"
   local package_name
 
   command -v omarchy >/dev/null 2>&1 && verify_pass "platform command available: omarchy" || verify_fail "platform command missing: omarchy"
@@ -65,4 +71,11 @@ platform_verify() {
   for package_name in herdr jq; do
     pacman -Q "$package_name" >/dev/null 2>&1 && verify_pass "Pacman package installed: $package_name" || verify_fail "Pacman package missing: $package_name"
   done
+  if [[ -f "$voxtype_model" ]] && printf '%s  %s\n' "$voxtype_model_sha256" "$voxtype_model" | sha256sum --check --status; then
+    verify_pass "Voxtype small model installed"
+  else
+    verify_fail "Voxtype small model missing or invalid"
+  fi
+  systemctl --user is-enabled --quiet voxtype.service >/dev/null 2>&1 && verify_pass "user service enabled: voxtype" || verify_fail "user service not enabled: voxtype"
+  systemctl --user is-active --quiet voxtype.service >/dev/null 2>&1 && verify_pass "user service active: voxtype" || verify_fail "user service not active: voxtype"
 }
