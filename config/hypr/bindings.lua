@@ -32,6 +32,11 @@
 -- o.bind("SUPER + H", nil, "voxtype record toggle")
 -- o.bind("SUPER + PERIOD", nil, "omarchy-shell shell toggle omarchy.emojis")
 
+-- Push to talk with physical Control + Semicolon (keyd maps Control to Super).
+hl.unbind("SUPER + code:47")
+o.bind("SUPER + code:47", "Start dictation (push-to-talk)", "voxtype record start")
+o.bind("SUPER + code:47", "Stop dictation (push-to-talk)", "voxtype record stop", { release = true })
+
 -- Open the Omarchy menu with the physical Super key, which keyd maps to Control.
 o.bind("CTRL + SPACE", "Omarchy menu", "omarchy-menu toggle root")
 o.bind("CTRL + Q", "Close window", hl.dsp.window.close())
