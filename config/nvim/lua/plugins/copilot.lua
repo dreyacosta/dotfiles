@@ -6,7 +6,7 @@ return {
       logger = {
         file = vim.fn.stdpath("log") .. "/copilot-lua.log",
         file_log_level = vim.log.levels.DEBUG,
-        print_log_level = vim.log.levels.WARN,
+        print_log_level = vim.log.levels.ERROR,
         trace_lsp = "verbose",
         trace_lsp_progress = true,
         log_lsp_messages = true,
