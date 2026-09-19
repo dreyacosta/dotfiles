@@ -1,6 +1,9 @@
 [settings]
 trusted_config_paths = ['~/projects']
 
+[settings.upgrade]
+auto_prune = false
+
 [tools]
 bun = "latest"
 claude = "latest"
