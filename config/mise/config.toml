@@ -16,3 +16,4 @@ node = { version = "latest", os = ["linux"] }
 "npm:@vlabo/cspell-lsp" = "latest"
 opencode = "latest"
 python = "latest"
+rust = "stable"
