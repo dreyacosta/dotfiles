@@ -8,7 +8,6 @@ links=(
   "home/cspell-custom-words.txt|$HOME/.cspell-custom-words.txt"
   "home/markdownlint.jsonc|$HOME/.markdownlint.jsonc"
   "config/herdr/config.toml|$CONFIG_HOME/herdr/config.toml"
-  "config/herdr/plugins/sessionizer.toml|$CONFIG_HOME/herdr/plugins/config/sessionizer/config.toml"
   "config/mise/config.toml|$CONFIG_HOME/mise/config.toml"
   "config/nvim|$CONFIG_HOME/nvim"
   "config/tmux-sessionizer/tmux-sessionizer.conf|$CONFIG_HOME/tmux-sessionizer/tmux-sessionizer.conf"

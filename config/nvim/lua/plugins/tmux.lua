@@ -18,7 +18,4 @@ return {
   init = function()
     vim.g.tmux_navigator_no_mappings = 1
   end,
-  config = function()
-    require("integrations.herdr_navigation")
-  end,
 }

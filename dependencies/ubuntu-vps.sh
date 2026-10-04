@@ -50,7 +50,6 @@ install_dependencies() {
   install_common_brew_packages
   install_mise_tools
   brew install herdr
-  install_herdr_plugins
   install_tmux_sessionizer
   enable_docker
 }

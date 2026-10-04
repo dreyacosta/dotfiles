@@ -22,46 +22,6 @@ install_common_brew_packages() {
   brew install "${packages[@]}"
 }
 
-run_herdr() {
-  local -r herdr_executable="${HERDR_EXECUTABLE:-herdr}"
-
-  MISE_CONFIG_FILE="$DOTFILES_REPO_DIR/config/mise/config.toml" mise exec -- "$herdr_executable" "$@"
-}
-
-herdr_plugin_is_current() {
-  local -r plugin_id="$1"
-  local -r commit="$2"
-
-  run_herdr plugin list --json | jq -e \
-    --arg plugin_id "$plugin_id" \
-    --arg commit "$commit" \
-    '.result.plugins[] | select(.plugin_id == $plugin_id and .enabled == true and .source.resolved_commit == $commit)' \
-    >/dev/null
-}
-
-install_herdr_plugin() {
-  local -r plugin_id="$1"
-  local -r repository="$2"
-  local -r commit="$3"
-
-  if herdr_plugin_is_current "$plugin_id" "$commit"; then
-    dotfiles_log "Herdr plugin already installed: $plugin_id@$commit"
-    return
-  fi
-  run_herdr plugin install "$repository" --ref "$commit" --yes
-}
-
-install_herdr_plugins() {
-  install_herdr_plugin \
-    "sessionizer" \
-    "andrewchng/herdr-sessionizer" \
-    "e3cdab0d8886c9dc2c50a6e09da334d6508fae7b"
-  install_herdr_plugin \
-    "vim-herdr-navigation" \
-    "paulbkim-dev/vim-herdr-navigation" \
-    "820d48f5d9c9a7dece6a4bebfa3982ec30bbfbb7"
-}
-
 install_tmux_sessionizer() {
   local -r install_dir="$HOME/.local/bin"
   local -r repo_dir="$install_dir/tmux-sessionizer"

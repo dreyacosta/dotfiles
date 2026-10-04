@@ -46,7 +46,6 @@ install_dependencies() {
   install_nvm
   install_mise_tools
   brew install herdr jq
-  install_herdr_plugins
   brew install zsh-autosuggestions
   install_tmux_sessionizer
   brew install --cask font-jetbrains-mono-nerd-font docker ghostty karabiner-elements

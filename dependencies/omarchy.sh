@@ -51,6 +51,5 @@ install_dependencies() {
   install_linux_homebrew
   activate_linux_homebrew
   install_mise_tools
-  HERDR_EXECUTABLE="${DOTFILES_OMARCHY_HERDR:-/usr/bin/herdr}" install_herdr_plugins
   install_tmux_sessionizer
 }
