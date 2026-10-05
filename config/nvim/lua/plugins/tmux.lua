@@ -1,5 +1,6 @@
 return {
   "christoomey/vim-tmux-navigator",
+  cond = vim.env.TMUX ~= nil and vim.env.TMUX ~= "",
   lazy = false,
   cmd = {
     "TmuxNavigateLeft",
