@@ -24,6 +24,11 @@ installs nvm from its official GitHub repository and installs its current LTS
 Node. Mise skips its Node declaration on macOS; the cspell command-line tools
 remain Mise-managed and run against nvm's Node there.
 
+Interactive terminals and SSH logins automatically launch or attach to the
+persistent Herdr session. Shells inside Herdr or tmux do not launch another
+instance. If Herdr is unavailable, startup continues in the normal shell; tmux
+remains available to launch manually.
+
 ## Backups and recovery
 
 Before replacing a target, the installer moves it into a timestamped directory

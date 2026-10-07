@@ -9,4 +9,4 @@ source ~/.dotfiles/shell/common/envs
 source ~/.dotfiles/shell/zsh/mise
 source ~/.dotfiles/shell/zsh/zoxide
 [[ $- == *i* ]] && source ~/.dotfiles/shell/zsh/inputrc
-source ~/.dotfiles/shell/common/tmux
+source ~/.dotfiles/shell/common/herdr

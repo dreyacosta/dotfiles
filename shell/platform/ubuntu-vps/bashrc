@@ -8,4 +8,4 @@ source ~/.dotfiles/shell/bash/mise
 source ~/.dotfiles/shell/bash/fzf
 source ~/.dotfiles/shell/bash/init
 source ~/.dotfiles/shell/bash/zoxide
-source ~/.dotfiles/shell/common/tmux
+source ~/.dotfiles/shell/common/herdr

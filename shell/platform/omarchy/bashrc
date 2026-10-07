@@ -9,4 +9,4 @@ source ~/.dotfiles/shell/common/docker
 source ~/.dotfiles/shell/bash/brew
 source ~/.dotfiles/shell/bash/init
 source ~/.dotfiles/shell/bash/zoxide
-source ~/.dotfiles/shell/common/tmux
+source ~/.dotfiles/shell/common/herdr
