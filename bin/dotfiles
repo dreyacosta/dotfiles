@@ -71,6 +71,7 @@ main() {
   test)
     "$DOTFILES_REPO_DIR/tests/install-smoke.sh"
     "$DOTFILES_REPO_DIR/tests/cli-smoke.sh"
+    bash "$DOTFILES_REPO_DIR/tests/remote-unlock-smoke.sh"
     ;;
   help | --help | -h)
     usage

@@ -32,3 +32,4 @@ targets are moved below `~/dotfiles-wayback` before replacement.
 - [Installation, updates, recovery, and troubleshooting](docs/installation.md)
 - [Maintainer guide and installer design](docs/maintenance.md)
 - [Apple T2 Touch Bar workaround](docs/apple-t2-touchbar.md)
+- [Remote disk unlock on Omarchy](docs/remote-disk-unlock.md)
