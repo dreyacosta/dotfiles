@@ -19,7 +19,7 @@ done
 
 fail() { dotfiles_log "$*"; exit 1; }
 [[ $EUID -ne 0 ]] || fail "Run as your normal user; the script uses sudo when needed."
-for command_name in ip pacman yay rg limine-mkinitcpio; do
+for command_name in ip pacman yay grep limine-mkinitcpio; do
   command -v "$command_name" >/dev/null || fail "Missing command: $command_name"
 done
 [[ -f /etc/mkinitcpio.conf && -f /etc/default/limine ]] || fail "Expected Omarchy mkinitcpio and Limine configuration."
@@ -71,7 +71,7 @@ unset _remote_hooks _remote_hook
 EOF_CONFIG
 
 # Keep an existing ip= setting rather than duplicating or overriding it.
-if ! rg -q '(^|[[:space:]"\x27])ip=' /etc/default/limine /etc/limine-entry-tool.d 2>/dev/null; then
+if ! grep -rEq "(^|[[:space:]\"'])ip=" /etc/default/limine /etc/limine-entry-tool.d 2>/dev/null; then
   sudo tee -a /etc/default/limine >/dev/null <<'EOF_CMDLINE'
 
 # Networking for remote disk unlock

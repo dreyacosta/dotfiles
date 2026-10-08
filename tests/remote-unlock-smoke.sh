@@ -23,10 +23,10 @@ done
 # Match the script's network-parameter detection against existing DHCP/static settings.
 for network_parameter in ip=dhcp ip=:::::eth1:dhcp ip=192.168.1.50::192.168.1.1:255.255.255.0::eth0:none; do
   printf 'KERNEL_CMDLINE[default]+=" %s"\n' "$network_parameter" > "$test_dir/limine"
-  rg -q '(^|[[:space:]"\x27])ip=' "$test_dir/limine"
+  grep -Eq "(^|[[:space:]\"'])ip=" "$test_dir/limine"
 done
 printf 'KERNEL_CMDLINE[default]+="cryptdevice=PARTUUID=example:root"\n' > "$test_dir/limine"
-if rg -q '(^|[[:space:]"\x27])ip=' "$test_dir/limine"; then
+if grep -Eq "(^|[[:space:]\"'])ip=" "$test_dir/limine"; then
   exit 1
 fi
 printf 'Remote unlock smoke test passed\n'
