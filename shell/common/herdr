@@ -1,9 +1,11 @@
 # Launch or attach to the persistent Herdr session
-if command -v herdr &>/dev/null \
+herdr_command="${herdr_command:-herdr}"
+if command -v "$herdr_command" &>/dev/null \
   && [[ -z "${TMUX:-}" ]] \
   && [[ -z "${HERDR_PANE_ID:-}" ]] \
   && [[ -n "${PS1:-}" ]] \
   && [[ $- == *i* ]] \
   && [[ $(tty) != "not a tty" ]]; then
-  herdr
+  "$herdr_command"
 fi
+unset herdr_command

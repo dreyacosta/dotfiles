@@ -1,3 +1,7 @@
+# Launch Herdr before any PATH setup: login shells rerun path_helper, so panes
+# would otherwise inherit and then re-add every entry.
+herdr_command=/opt/homebrew/bin/herdr
+source ~/.dotfiles/shell/common/herdr
 source ~/.dotfiles/shell/zsh/brew
 source ~/.dotfiles/shell/zsh/init
 source ~/.dotfiles/shell/common/aliases
@@ -8,4 +12,3 @@ source ~/.dotfiles/shell/common/envs
 source ~/.dotfiles/shell/platform/macos/nvm
 source ~/.dotfiles/shell/zsh/zoxide
 [[ $- == *i* ]] && source ~/.dotfiles/shell/zsh/inputrc
-source ~/.dotfiles/shell/common/herdr

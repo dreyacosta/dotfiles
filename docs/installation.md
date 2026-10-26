@@ -32,6 +32,11 @@ persistent Herdr session. Shells inside Herdr or tmux do not launch another
 instance. If Herdr is unavailable, startup continues in the normal shell; tmux
 remains available to launch manually.
 
+On macOS, the outer terminal shell launches Herdr before any PATH setup, so
+each pane's login shell builds PATH once after `path_helper`. Keep `~/.zprofile`
+free of PATH changes; Docker Desktop's CLI is reached through its
+`/usr/local/bin` links.
+
 ## Backups and recovery
 
 Before replacing a target, the installer moves it into a timestamped directory
