@@ -36,6 +36,7 @@ install_nvm() {
   fi
   source "$NVM_DIR/nvm.sh"
   nvm install --lts
+  nvm alias default 'lts/*'
 }
 
 install_nvm_npm_packages() {
@@ -65,5 +66,4 @@ install_dependencies() {
   brew install zsh-autosuggestions
   install_tmux_sessionizer
   brew install --cask font-jetbrains-mono-nerd-font karabiner-elements
-  brew install --cask peteonrails/voxtype/voxtype
 }

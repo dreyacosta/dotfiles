@@ -79,11 +79,7 @@ service. Configuration installation starts the service after linking its
 configuration. Omarchy's default F9 push-to-talk and Super+Control+X toggle
 bindings remain available. Physical Control+Semicolon provides an additional
 push-to-talk binding through keyd without replacing Super+V universal paste.
-
-On macOS, launch Voxtype after installation and complete its setup wizard.
-Download the `small` model, grant Microphone and Accessibility access, and
-enable launch at login. macOS requires those privacy permissions to be granted
-interactively.
+macOS does not install Voxtype.
 
 ## Troubleshooting
 
