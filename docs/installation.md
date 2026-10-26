@@ -18,11 +18,12 @@ Dependency provisioning and configuration installation are separate. Rerunning
 an install does not repeat package-manager work.
 
 The dependency command can install packages, enable services, and add the user
-to system groups. Read its output for required logout or reboot steps. Every
-platform uses the shared Mise configuration for development tools. macOS also
-installs nvm from its official GitHub repository and installs its current LTS
-Node. Mise skips its Node declaration on macOS; the cspell command-line tools
-remain Mise-managed and run against nvm's Node there.
+to system groups. Read its output for required logout or reboot steps. Omarchy
+and Ubuntu use the shared Mise configuration for development tools. macOS does
+not use Mise: it installs nvm from its official GitHub repository with its
+current LTS Node, installs the cspell command-line tools as global npm packages
+of that Node, installs GitHub CLI through Homebrew, and installs Claude Code
+with its official native installer.
 
 Interactive terminals and SSH logins automatically launch or attach to the
 persistent Herdr session. Shells inside Herdr or tmux do not launch another
@@ -60,8 +61,8 @@ Correct links and copies are left unchanged. Files in application-managed
 directories are linked individually, so unrelated application state is
 preserved.
 
-The shared Mise configuration owns Go, Python, Bun, and npm-backed command-line
-tools on every platform, plus Node on Linux. Herdr is not Mise-managed: Omarchy
+On Omarchy and Ubuntu, the shared Mise configuration owns Node, Go, Python, Bun,
+and npm-backed command-line tools. Herdr is not Mise-managed: Omarchy
 owns it as an Arch package, while macOS and Ubuntu use its
 officially supported Homebrew package. See [Tool management](tool-management.md)
 for the cross-platform ownership convention.
@@ -87,6 +88,7 @@ interactively.
 - A wrong symlink after moving the repository is corrected by rerunning install.
 - A Docker group failure usually requires logging out and back in after dependency provisioning.
 - Missing mise tools can be repaired by rerunning the platform dependency command.
+- On macOS, missing cspell tools after an nvm LTS upgrade are reinstalled by rerunning the dependency command.
 - A failed service check should be investigated with `systemctl status <service>`.
 - An interrupted install may leave earlier mappings applied; inspect the logged backup directory before rerunning.
 

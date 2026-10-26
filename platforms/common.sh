@@ -8,7 +8,6 @@ links=(
   "home/cspell-custom-words.txt|$HOME/.cspell-custom-words.txt"
   "home/markdownlint.jsonc|$HOME/.markdownlint.jsonc"
   "config/herdr/config.toml|$CONFIG_HOME/herdr/config.toml"
-  "config/mise/config.toml|$CONFIG_HOME/mise/config.toml"
   "config/nvim|$CONFIG_HOME/nvim"
   "config/tmux-sessionizer/tmux-sessionizer.conf|$CONFIG_HOME/tmux-sessionizer/tmux-sessionizer.conf"
   "config/starship.toml|$CONFIG_HOME/starship.toml"
@@ -18,10 +17,10 @@ links=(
   "config/tmux/tmux.conf|$HOME/.tmux.conf"
 )
 copies=()
-required_commands=(bat eza fd fzf git gum herdr jq lazygit mise nvim rg starship tmux zoxide)
+required_commands=(bat eza fd fzf git gum herdr jq lazygit nvim rg starship tmux zoxide)
 required_services=()
 required_executables=("$HOME/.local/bin/tmux-sessionizer/tmux-sessionizer")
-mise_config="config/mise/config.toml"
+mise_config=""
 
 platform_prepare() { return 0; }
 reload_herdr_config() {

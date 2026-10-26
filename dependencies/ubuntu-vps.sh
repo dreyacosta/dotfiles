@@ -48,8 +48,8 @@ install_dependencies() {
   # Ubuntu package names and release ages vary for this user-space CLI bundle;
   # Linux Homebrew provides consistent commands and current versions.
   install_common_brew_packages
+  brew install herdr mise
   install_mise_tools
-  brew install herdr
   install_tmux_sessionizer
   enable_docker
 }

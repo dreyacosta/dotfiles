@@ -6,8 +6,9 @@
 the installer, verifier, or dependency workflow behind that interface.
 
 Platform manifests under `platforms/` are the single source of truth for
-managed links, copies, commands, services, and the active Mise configuration.
-The `[tools]` table in that Mise configuration is the tool inventory. Both
+managed links, copies, commands, services, and the active Mise configuration,
+if the platform uses one. The `[tools]` table in that Mise configuration is the
+Mise tool inventory. Both
 installation and verification consume these declarations. Loading a manifest
 must be side-effect free; machine changes belong in dependency workflows or
 explicit post-install hooks.

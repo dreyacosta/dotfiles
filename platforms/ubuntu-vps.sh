@@ -4,8 +4,10 @@ platform_name="ubuntu-vps"
 links+=(
   "shell/platform/ubuntu-vps/bashrc|$HOME/.bashrc"
   "config/git/linux|$CONFIG_HOME/git/config"
+  "config/mise/config.toml|$CONFIG_HOME/mise/config.toml"
 )
-required_commands+=(brew docker)
+required_commands+=(brew docker mise)
+mise_config="config/mise/config.toml"
 required_services=(docker)
 platform_verify() {
   if [[ -r /etc/os-release ]] && . /etc/os-release && [[ "${ID:-}" == "ubuntu" ]]; then

@@ -91,6 +91,7 @@ HOME="$migration_home" XDG_CONFIG_HOME="$migration_home/.config" \
   "$migration_repo/bin/dotfiles" install macos >/dev/null
 [[ -d "$migration_home/.config/tmux-sessionizer" && ! -L "$migration_home/.config/tmux-sessionizer" ]] || \
   fail "symlinked parent directory was not migrated"
+[[ ! -e "$migration_home/.config/mise" ]] || fail "macOS linked the Mise configuration"
 assert_link "$migration_home/.config/tmux-sessionizer/tmux-sessionizer.conf" \
   "$migration_repo/config/tmux-sessionizer/tmux-sessionizer.conf"
 [[ -f "$migration_repo/config/tmux-sessionizer/tmux-sessionizer.conf" && \

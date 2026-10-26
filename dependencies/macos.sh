@@ -38,14 +38,30 @@ install_nvm() {
   nvm install --lts
 }
 
+install_nvm_npm_packages() {
+  # Global npm packages belong to one Node version; rerunning dependencies
+  # after an LTS upgrade reinstalls them for the new default.
+  npm install -g cspell @vlabo/cspell-lsp
+}
+
+install_claude_code() {
+  # Exception: the native installer keeps Claude Code self-updating.
+  if [[ -x "$HOME/.local/bin/claude" ]]; then
+    dotfiles_log "Claude Code already installed: $HOME/.local/bin/claude"
+    return
+  fi
+  /bin/bash -c "$(curl -fsSL https://claude.ai/install.sh)"
+}
+
 install_dependencies() {
   require_command_line_tools
   install_macos_homebrew
   activate_macos_homebrew
   install_common_brew_packages
   install_nvm
-  install_mise_tools
-  brew install herdr jq
+  install_nvm_npm_packages
+  install_claude_code
+  brew install gh herdr jq
   brew install zsh-autosuggestions
   install_tmux_sessionizer
   brew install --cask font-jetbrains-mono-nerd-font docker ghostty karabiner-elements

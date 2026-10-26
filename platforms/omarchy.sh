@@ -11,9 +11,11 @@ links+=(
   "config/ghostty/themes/Tokyonight Night|$CONFIG_HOME/ghostty/themes/Tokyonight Night"
   "config/git/linux|$CONFIG_HOME/git/config"
   "config/voxtype/omarchy.toml|$CONFIG_HOME/voxtype/config.toml"
+  "config/mise/config.toml|$CONFIG_HOME/mise/config.toml"
   "etc/keyd/default.conf|/etc/keyd/default.conf"
 )
-required_commands+=(brew docker keyd voxtype wtype)
+required_commands+=(brew docker keyd mise voxtype wtype)
+mise_config="config/mise/config.toml"
 required_services=(keyd)
 is_touchbar_mac() {
   local system_vendor=""

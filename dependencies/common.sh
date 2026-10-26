@@ -18,7 +18,7 @@ activate_linux_homebrew() {
 }
 
 install_common_brew_packages() {
-  local -r packages=(bat eza fd fzf gum lazygit mise neovim ripgrep starship tmux zoxide)
+  local -r packages=(bat eza fd fzf gum lazygit neovim ripgrep starship tmux zoxide)
   brew install "${packages[@]}"
 }
 

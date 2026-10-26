@@ -12,7 +12,7 @@ cspell = "latest"
 gemini = { version = "latest", allow_builds = ["@github/keytar", "node-pty"] }
 gh = "latest"
 go = "latest"
-node = { version = "latest", os = ["linux"] }
+node = "latest"
 "npm:@vlabo/cspell-lsp" = "latest"
 opencode = "latest"
 python = "latest"

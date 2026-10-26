@@ -10,14 +10,15 @@ links+=(
   "config/git/macos|$CONFIG_HOME/git/config"
   "config/voxtype/macos.toml|$HOME/Library/Application Support/voxtype/config.toml"
 )
-required_commands+=(brew voxtype)
+required_commands+=(brew claude cspell cspell-lsp gh voxtype)
+required_executables+=("$HOME/.local/bin/claude")
 
 platform_verify() {
   local nvm_dir="$HOME/.nvm"
   local package_name
 
   [[ "$(uname -s)" == "Darwin" ]] && verify_pass "platform is macOS" || verify_fail "platform is not macOS"
-  for package_name in herdr jq; do
+  for package_name in gh herdr jq; do
     brew list --formula "$package_name" >/dev/null 2>&1 && verify_pass "Homebrew package installed: $package_name" || verify_fail "Homebrew package missing: $package_name"
   done
   [[ -n "${XDG_CONFIG_HOME:-}" ]] && nvm_dir="$XDG_CONFIG_HOME/nvm"
@@ -28,5 +29,13 @@ platform_verify() {
     verify_pass "nvm LTS Node available"
   else
     verify_fail "nvm LTS Node missing"
+  fi
+  if NVM_DIR="$nvm_dir" bash -c '
+    source "$NVM_DIR/nvm.sh"
+    nvm use --silent --lts && command -v cspell && command -v cspell-lsp
+  ' >/dev/null 2>&1; then
+    verify_pass "nvm LTS npm packages installed: cspell @vlabo/cspell-lsp"
+  else
+    verify_fail "nvm LTS npm packages missing: cspell @vlabo/cspell-lsp"
   fi
 }

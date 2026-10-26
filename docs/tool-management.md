@@ -13,8 +13,8 @@ Choose exactly one owner for each executable:
 | --- | --- | --- | --- | --- |
 | System library, desktop application, service, driver, or OS-integrated utility | Native system package manager | `omarchy pkg add`; use `omarchy pkg aur add` only for AUR-only packages | Homebrew | APT |
 | User-space utility unavailable or unsuitable through the native repositories | Documented package-manager fallback | AUR, only when necessary | Homebrew | Linux Homebrew |
-| Versioned language runtime or development environment | Mise | Mise | Mise | Mise |
-| User-scoped developer CLI supported by a reliable Mise backend | Mise | Mise | Mise | Mise |
+| Versioned language runtime or development environment | Mise | Mise | nvm for Node; otherwise Homebrew | Mise |
+| User-scoped developer CLI supported by a reliable Mise backend | Mise | Mise | Homebrew, or global npm under nvm | Mise |
 | Tool already supplied and owned by the platform | Existing platform installation | Keep the Omarchy package | Keep the native installation | Keep the native installation |
 | Tool unavailable through either applicable owner | Explicit exception | Official installer or another upstream-supported method | Same | Same |
 
@@ -40,6 +40,13 @@ for system-integrated software and use Linux Homebrew only as a documented
 fallback for user-space utilities whose APT package is unavailable or
 unsuitable. These platform differences do not change which *kind* of software
 belongs to Mise.
+
+macOS is the exception: it does not install Mise because it does not need
+project-aware version switching there. Node is nvm-owned, cspell and
+cspell-lsp are global npm packages of nvm's LTS Node, GitHub CLI is
+Homebrew-owned, and Claude Code uses its official native installer so it keeps
+updating itself. The Mise configuration is linked and verified only on Omarchy
+and Ubuntu.
 
 Ubuntu's Linux Homebrew fallback currently covers the shared user-space CLI
 bundle because Ubuntu releases differ in package availability, executable names,
@@ -91,9 +98,8 @@ When changing dependency provisioning:
 
 - Record cross-platform Mise tools once in `config/mise/config.toml` and remove
   competing installs from native package or language package managers.
-- Use a tool's Mise `os` restriction when one platform intentionally assigns
-  that tool to another owner; macOS Node is nvm-owned while Linux Node is
-  Mise-owned.
+- Use a tool's Mise `os` restriction when one Mise platform intentionally
+  assigns that tool to another owner.
 - Put native package installation in each platform's dependency workflow and
   make it idempotent.
 - Verify availability through the selected owner, not merely through whichever
