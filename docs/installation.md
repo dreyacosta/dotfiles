@@ -23,7 +23,9 @@ and Ubuntu use the shared Mise configuration for development tools. macOS does
 not use Mise: it installs nvm from its official GitHub repository with its
 current LTS Node, installs the cspell command-line tools as global npm packages
 of that Node, installs GitHub CLI through Homebrew, and installs Claude Code
-with its official native installer.
+with its official native installer. Install Docker Desktop and Ghostty on
+macOS manually from their official `.dmg` files; dependency provisioning does
+not manage them.
 
 Interactive terminals and SSH logins automatically launch or attach to the
 persistent Herdr session. Shells inside Herdr or tmux do not launch another

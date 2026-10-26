@@ -64,6 +64,6 @@ install_dependencies() {
   brew install gh herdr jq
   brew install zsh-autosuggestions
   install_tmux_sessionizer
-  brew install --cask font-jetbrains-mono-nerd-font docker ghostty karabiner-elements
+  brew install --cask font-jetbrains-mono-nerd-font karabiner-elements
   brew install --cask peteonrails/voxtype/voxtype
 }
