@@ -80,8 +80,9 @@ can therefore upgrade tools without a corresponding repository change.
 
 Omarchy manages dictation installation and settings, including Superwhisper.
 The dotfiles do not install Voxtype, download its models, or manage its service.
-Physical Control+Semicolon provides push-to-talk through `omarchy-dictation`,
-using the backend selected in Omarchy (keyd maps physical Control to Super).
+Dictation uses Omarchy's default shortcuts: Alt+Space toggles recording, and
+holding Right Alt (AltGr) provides push-to-talk. No personal dictation bindings
+are added by the dotfiles.
 
 Check the selected backend with `omarchy default dictation`. To switch to
 Superwhisper, use Setup > Defaults > Dictation in Omarchy. Configure its
