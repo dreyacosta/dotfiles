@@ -76,15 +76,20 @@ for the cross-platform ownership convention.
 Mise configurations currently use `latest` tool versions. A dependency rerun
 can therefore upgrade tools without a corresponding repository change.
 
-### Voxtype
+### Dictation
 
-On Omarchy, dependency provisioning installs Voxtype and its typing backend,
-downloads the configured multilingual Whisper model, and enables the user
-service. Configuration installation starts the service after linking its
-configuration. Omarchy's default F9 push-to-talk and Super+Control+X toggle
-bindings remain available. Physical Control+Semicolon provides an additional
-push-to-talk binding through keyd without replacing Super+V universal paste.
-macOS does not install Voxtype.
+Omarchy manages dictation installation and settings, including Superwhisper.
+The dotfiles do not install Voxtype, download its models, or manage its service.
+Physical Control+Semicolon provides push-to-talk through `omarchy-dictation`,
+using the backend selected in Omarchy (keyd maps physical Control to Super).
+
+Check the selected backend with `omarchy default dictation`. To switch to
+Superwhisper, use Setup > Defaults > Dictation in Omarchy. Configure its
+language, processing mode, and microphone through Superwhisper's settings or CLI.
+
+Removing Voxtype from the dotfiles does not uninstall existing packages, stop
+its service, or remove previously installed configuration links and models.
+On an existing machine, switch and verify dictation before cleaning up Voxtype.
 
 ## Troubleshooting
 
